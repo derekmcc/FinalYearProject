@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GymBuddy</string>
+    <string name="title_activity_planner">PlannerActivity</string>
+</resources>
