@@ -1,64 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
-            android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@drawable/firebase_lockup_400" />
+
+    <LinearLayout
+        android:id="@+id/layoutEmailPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/fieldEmail"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/fieldPassword"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutEmailPassword"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSignIn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="buttonListener"
+            android:text="@string/sign_in" />
+
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="buttonListener"
+            android:text="@string/sign_up" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSignOut"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="161dp"
+        android:onClick="buttonListener"
+        android:text="@string/sign_out" />
+
+</RelativeLayout>
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context=".LoginActivity">-->
+
+    <!--<ScrollView-->
+    <!--android:id="@+id/login_form"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/email_login_form"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
 
 
 
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"/>
+    <!--<EditText-->
+    <!--android:id="@+id/email"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:hint="@string/prompt_email"-->
+    <!--android:inputType="textEmailAddress"-->
+    <!--android:maxLines="1"/>-->
 
 
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                />
+    <!--<EditText-->
+    <!--android:id="@+id/password"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:hint="Password"-->
+    <!--android:imeActionId="@+id/login"-->
+    <!--android:imeActionLabel="@string/action_sign_in_short"-->
+    <!--android:imeOptions="actionUnspecified"-->
+    <!--android:inputType="textPassword"-->
+    <!--android:maxLines="1"-->
+    <!--/>-->
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sign In"
-                android:textStyle="bold"/>
+    <!--<Button-->
+    <!--android:id="@+id/btnSignIn"-->
+    <!--style="?android:textAppearanceSmall"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:onClick="buttonListener"-->
+    <!--android:text="Sign In"-->
+    <!--android:textStyle="bold" />-->
 
-            <Button
-                android:id="@+id/email_sign_out_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sign out"
-                android:textStyle="bold"/>
+    <!--<Button-->
+    <!--android:id="@+id/btnSignOut"-->
+    <!--style="?android:textAppearanceSmall"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:onClick="buttonListener"-->
+    <!--android:text="Sign out"-->
+    <!--android:textStyle="bold"/>-->
 
-        </LinearLayout>
-    </ScrollView>
-</android.support.constraint.ConstraintLayout>
+    <!--</LinearLayout>-->
+    <!--</ScrollView>-->
+    <!--</android.support.constraint.ConstraintLayout>-->
