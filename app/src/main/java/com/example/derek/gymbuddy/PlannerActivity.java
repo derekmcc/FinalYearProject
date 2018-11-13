@@ -41,7 +41,6 @@ public class PlannerActivity extends AppCompatActivity {
             //log message
             Log.d(TAG,"Going to Routine Activity");
             //call the routine activity
-            //go to the planner activity
             Intent i = new Intent(this, RoutineActivity.class);
             startActivity(i);
         }//end if

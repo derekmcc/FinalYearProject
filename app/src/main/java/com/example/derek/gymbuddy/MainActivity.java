@@ -12,14 +12,26 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private Button plannerBtn;
+    //private FirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialize the FirebaseAuth instance.
+      //  mAuth = FirebaseAuth.getInstance();
+
         plannerBtn = findViewById(R.id.btnPlanner);
     }//end onCreate
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+//    }
 
     /**
      * Method to handle button clicks

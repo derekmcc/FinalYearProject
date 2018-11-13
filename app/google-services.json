@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "711082260612",
+    "firebase_url": "https://finalyearproject-8995b.firebaseio.com",
+    "project_id": "finalyearproject-8995b",
+    "storage_bucket": "finalyearproject-8995b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711082260612:android:f66e3cacd6d0340e",
+        "android_client_info": {
+          "package_name": "com.example.derek.gymbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711082260612-pfrfkm44k6hji457curl48n1v8b1l4uh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.derek.gymbuddy",
+            "certificate_hash": "7404677a3e71e3fb0991aa597dc17e876e796b24"
+          }
+        },
+        {
+          "client_id": "711082260612-5qpugbcsg81ahuvl0tll1bds8tbdhmv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD10Z_JRV1X84kYet5ddI_TemBFDEy9VsA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711082260612-5qpugbcsg81ahuvl0tll1bds8tbdhmv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
