@@ -41,8 +41,6 @@ public class PlannerAdapterActivity extends RecyclerView.Adapter<PlannerAdapterA
         // create a new view
         View itemView =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_planner_adapter, parent, false);
-
-        //MyViewHolder vh = new MyViewHolder(v);
         return new MyViewHolder(itemView);
     }
 
@@ -55,7 +53,6 @@ public class PlannerAdapterActivity extends RecyclerView.Adapter<PlannerAdapterA
         holder.weight.setText(mDataset[position]);
         holder.numReps.setText(mDataset[position]);
         holder.numSets.setText(mDataset[position]);
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)

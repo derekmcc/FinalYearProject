@@ -30,5 +30,9 @@ public class BaseActivity extends AppCompatActivity {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+    public String getEmail() {
+        return FirebaseAuth.getInstance().getCurrentUser().getEmail();
+    }
+
 
 }

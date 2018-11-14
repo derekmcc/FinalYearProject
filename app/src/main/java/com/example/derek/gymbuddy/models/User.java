@@ -2,7 +2,6 @@ package com.example.derek.gymbuddy.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-// [START blog_user_class]
 @IgnoreExtraProperties
 public class User {
 
@@ -17,6 +16,5 @@ public class User {
         this.username = username;
         this.email = email;
     }
-
 }
 // [END blog_user_class]

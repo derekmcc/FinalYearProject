@@ -86,12 +86,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void callMain() {
-        //go to the planner activity
-        Intent i = new Intent(this, PlannerActivity.class);
-        startActivity(i);
-    }
-
     private void onAuthSuccess(FirebaseUser user) {
         String username = usernameFromEmail(user.getEmail());
 

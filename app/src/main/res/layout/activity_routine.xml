@@ -139,11 +139,25 @@
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="36dp"
         android:onClick="buttonListener"
         android:text="Add Routine"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.155"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/npSets" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="139dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="35dp"
+        android:onClick="buttonListener"
+        android:layout_marginBottom="28dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/npReps" />
 </android.support.constraint.ConstraintLayout>
