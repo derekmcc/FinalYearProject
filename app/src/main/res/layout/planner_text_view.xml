@@ -25,13 +25,13 @@
         android:layout_below="@id/title" />
 
     <TextView
-        android:id="@+id/numSets"
+        android:id="@+id/sets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true" />
 
     <TextView
-        android:id="@+id/numReps"
+        android:id="@+id/reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true" />

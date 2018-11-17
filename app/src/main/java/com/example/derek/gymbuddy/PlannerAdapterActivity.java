@@ -1,21 +1,21 @@
 package com.example.derek.gymbuddy;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.derek.gymbuddy.models.Routine;
+
+import java.util.List;
 
 public class PlannerAdapterActivity extends RecyclerView.Adapter<PlannerAdapterActivity.MyViewHolder>  {
 
-    private String[] mDataset;
+    private List<Routine> routineList;
 
-    public PlannerAdapterActivity(String[] myDataset) {
-        this.mDataset = myDataset;
+    public PlannerAdapterActivity(List routineList) {
+        this.routineList = routineList;
     }
 
     // Provide a reference to the views for each data item
@@ -29,8 +29,8 @@ public class PlannerAdapterActivity extends RecyclerView.Adapter<PlannerAdapterA
             super(v);
             routine = (TextView)v.findViewById(R.id.routine);
             weight = (TextView)v.findViewById(R.id.weight);
-            numReps = (TextView)v.findViewById(R.id.numReps);
-            numSets = (TextView)v.findViewById(R.id.numSets);
+            numReps = (TextView)v.findViewById(R.id.reps);
+            numSets = (TextView)v.findViewById(R.id.sets);
         }
     }
 
@@ -47,17 +47,17 @@ public class PlannerAdapterActivity extends RecyclerView.Adapter<PlannerAdapterA
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.routine.setText(mDataset[position]);
-        holder.weight.setText(mDataset[position]);
-        holder.numReps.setText(mDataset[position]);
-        holder.numSets.setText(mDataset[position]);
+        Routine routine = routineList.get(position);
+        holder.routine.setText(routine.getRoutine());
+        holder.weight.setText(routine.getWeight());
+        holder.numReps.setText(routine.getReps());
+        holder.numSets.setText(routine.getSets());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return routineList.size();
     }
+
 }

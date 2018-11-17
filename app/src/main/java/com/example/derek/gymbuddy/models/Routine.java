@@ -1,33 +1,37 @@
 package com.example.derek.gymbuddy.models;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class Routine {
 
    // public String uid;
-    public String routineName;
+    public String routine;
     public int weight;
-    public int numSets;
-    public int numReps;
+    public int sets;
+    public int reps;
 
     public  Routine() {
     }
 
-    public Routine(String routineName, int weight, int numSets, int numReps) {
+    public Routine(String routine, int weight, int sets, int reps) {
         //this.uid = uid;
-        this.routineName = routineName;
+        this.routine = routine;
         this.weight = weight;
-        this.numSets = numSets;
-        this.numReps = numReps;
+        this.sets = sets;
+        this.reps = reps;
     }
 
-    public String getRoutineName() {
-        return routineName;
+    public String getRoutine() {
+        return routine;
     }
 
-    public void setRoutineName(String routineName) {
-        this.routineName = routineName;
+    public void setRoutine(String routine) {
+        this.routine = routine;
     }
 
     public int getWeight() {
@@ -38,19 +42,29 @@ public class Routine {
         this.weight = weight;
     }
 
-    public int getNumSets() {
-        return numSets;
+    public int getSets() {
+        return sets;
     }
 
-    public void setNumSets(int numSets) {
-        this.numSets = numSets;
+    public void setSets(int sets) {
+        this.sets = sets;
     }
 
-    public int getNumReps() {
-        return numReps;
+    public int getReps() {
+        return reps;
     }
 
-    public void setNumReps(int numReps) {
-        this.numReps = numReps;
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("routine", routine);
+        result.put("weight", weight);
+        result.put("sets", sets);
+        result.put("reps", reps);
+        return result;
     }
 }//end class
