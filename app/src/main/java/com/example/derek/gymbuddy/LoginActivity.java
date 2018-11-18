@@ -64,13 +64,13 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Method to create toast messages
-     * @param message Sentence to be passed
-     */
-    private void toastMessage(String message){
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-    }//end toastMessage
+//    /**
+//     * Method to create toast messages
+//     * @param message Sentence to be passed
+//     */
+//    private void toastMessage(String message){
+//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+//    }//end toastMessage
 
     public void buttonListener(View view) {
         if (view.getId() == R.id.btnSignIn) {

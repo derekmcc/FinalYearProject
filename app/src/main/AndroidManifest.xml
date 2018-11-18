@@ -27,7 +27,7 @@
         <activity android:name=".PlannerActivity" />
         <activity android:name=".RoutineActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".PlannerAdapterActivity"></activity>
+        <activity android:name=".viewholders.PlannerAdapterActivity"></activity>
     </application>
 
 </manifest>

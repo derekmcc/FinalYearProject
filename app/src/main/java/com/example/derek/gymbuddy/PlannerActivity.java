@@ -1,18 +1,19 @@
 package com.example.derek.gymbuddy;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.example.derek.gymbuddy.models.Routine;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -22,18 +23,20 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlannerActivity extends AppCompatActivity {
+public class PlannerActivity extends BaseActivity {
 
     private static final String TAG = "PlannerActivity";
+    public static final String EXTRA_ROUTINE_KEY = "routine_key";
+
     private FloatingActionButton addRoutineBtn;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mDatabase;
     private List<Routine> routineList = new ArrayList<>();
-    private List a = new ArrayList();
+    private String mRoutineKey;
 
-    private FirebaseRecyclerAdapter <Routine, PlannerActivity.RoutineViewHolder> mPeopleRVAdapter;
+    private FirebaseRecyclerAdapter <Routine, RoutineViewHolder> mPeopleRVAdapter;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -108,15 +111,17 @@ public class PlannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_planner);
 
         setTitle("Routine Details");
-
+//        final DatabaseReference routineRef = getRef(position);
+//        final String routineKey = routineRef.getKey();
         addRoutineBtn = findViewById(R.id.btnAddRoutine);
-        //"News" here will reflect what you have called your database in Firebase.
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("News");
+
+        //"News" here will reflect what you have called your database in Firebase.->>>>>>>>>>>>>>>CHANGE DB NAME
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        DatabaseReference personsRef = FirebaseDatabase.getInstance().getReference().child("News");
+        DatabaseReference personsRef = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         Query personsQuery = personsRef.orderByKey();
 
         mRecyclerView.hasFixedSize();
@@ -124,31 +129,33 @@ public class PlannerActivity extends AppCompatActivity {
 
         FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<Routine>().setQuery(personsQuery, Routine.class).build();
 
-        mPeopleRVAdapter = new FirebaseRecyclerAdapter<Routine, PlannerActivity.RoutineViewHolder>(personsOptions) {
+        mPeopleRVAdapter = new FirebaseRecyclerAdapter<Routine, RoutineViewHolder>(personsOptions) {
             @Override
-            protected void onBindViewHolder(PlannerActivity.RoutineViewHolder holder, final int position, final Routine model) {
+            protected void onBindViewHolder(RoutineViewHolder holder, final int position, final Routine model) {
                 holder.setRoutine(model.getRoutine());
                 holder.setWeight(model.getWeight());
                 holder.setSets(model.getSets());
                 holder.setReps(model.getReps());
-               // holder.mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toastMessage("Click On " + position);
 //                        final String url = model.getUrl();
 //                        Intent intent = new Intent(getApplicationContext(), NewsWebView.class);
 //                        intent.putExtra("id", url);
 //                        startActivity(intent);
-//                    }
-                //});
+                    }
+                });
             }
 
             @Override
-            public PlannerActivity.RoutineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public RoutineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.activity_planner_adapter, parent, false);
 
-                return new PlannerActivity.RoutineViewHolder(view);
+                return new RoutineViewHolder(view);
             }
         };
 
@@ -167,34 +174,5 @@ public class PlannerActivity extends AppCompatActivity {
         mPeopleRVAdapter.stopListening();
 
 
-    }
-
-    public static class RoutineViewHolder extends RecyclerView.ViewHolder{
-        private TextView tvName, tvWeight, tvReps, tvSets;
-
-        View mView;
-        public RoutineViewHolder(View itemView){
-            super(itemView);
-            mView = itemView;
-        }
-        public void setRoutine(String routine){
-            tvName = (TextView)mView.findViewById(R.id.routineRow);
-            tvName.setText(routine);
-        }
-        public void setWeight(int weight){
-            String strWeight = "" + weight;
-            tvWeight = (TextView)mView.findViewById(R.id.weightRow);
-            tvWeight.setText(strWeight);
-        }
-        public void setReps(int reps){
-            String strReps = "" + reps;
-            tvReps = (TextView)mView.findViewById(R.id.repsRow);
-            tvReps.setText(strReps);
-        }
-        public void setSets(int sets){
-            String strSets = "" + sets;
-            tvSets = (TextView)mView.findViewById(R.id.setRow);
-            tvSets.setText(strSets);
-        }
     }
 }//end class

@@ -19,7 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RoutineActivity extends BaseActivity implements NumberPicker.OnValueChangeListener {
 
@@ -89,13 +94,13 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         weightSpinner.setAdapter(weightAdapter);
     }//end onCreate
 
-    /**
-     * Method to create toast messages
-     * @param message Sentence to be passed
-     */
-    private void toastMessage(String message){
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-    }//end toastMessage
+//    /**
+//     * Method to create toast messages
+//     * @param message Sentence to be passed
+//     */
+//    private void toastMessage(String message){
+//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+//    }//end toastMessage
 
     /**
      * Listener to respond to changes on the number pickers
@@ -138,6 +143,14 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         if (view.getId() == R.id.btnAdd) {
             String selectedRoutine = routineSpinner.getSelectedItem().toString();
             int selectedWeight = (int) weightSpinner.getSelectedItem();
+
+            //conditional statement to set the default values to 1
+            if (reps == 0) {
+                reps = 1;
+            }//end if
+            if (sets == 0) {
+                sets = 1;
+            }//end if
             writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
         } else if (view.getId() == R.id.btnCancel) {
             //call the planner activity
@@ -147,9 +160,18 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
     }//end button listener
 
     private void writeNewRoutine(String routineName, int weight, int numSets, int numReps) {
-        Routine routine = new Routine(routineName, weight, numSets, numReps);
-        DatabaseReference newChildRef = mDatabase.push();
-        String key = newChildRef.getKey();
-        mDatabase.child(userId).child(key).setValue(routine);
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c);
+
+        String key = mDatabase.child("routines").push().getKey();
+        Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
+        Map<String, Object> postValues = routine.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
+        mDatabase.updateChildren(childUpdates);
+        //DatabaseReference newChildRef = mDatabase.push();
+        //String key = newChildRef.getKey();
+        //mDatabase.child(userId).child(key).setValue(routine);
     }
 }//end class
