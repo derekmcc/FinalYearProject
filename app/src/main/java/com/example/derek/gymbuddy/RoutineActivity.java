@@ -151,7 +151,17 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
             if (sets == 0) {
                 sets = 1;
             }//end if
+
+            //add the new routine to the db
             writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
+            //show the loading dialog
+            showProgressDialog();
+            //display toast message
+            toastMessage("Routine Successfully Added");
+
+            //create an intent to go back to the Planner page
+            Intent i = new Intent(this, PlannerActivity.class);
+            startActivity(i);
         } else if (view.getId() == R.id.btnCancel) {
             //call the planner activity
             Intent i = new Intent(this, PlannerActivity.class);

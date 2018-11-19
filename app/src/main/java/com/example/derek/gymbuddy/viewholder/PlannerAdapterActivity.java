@@ -1,15 +1,4 @@
-package com.example.derek.gymbuddy.viewholders;
-
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.example.derek.gymbuddy.models.Routine;
-
-import java.util.List;
+package com.example.derek.gymbuddy.viewholder;
 
 public class PlannerAdapterActivity  {
 //

@@ -27,7 +27,12 @@
         <activity android:name=".PlannerActivity" />
         <activity android:name=".RoutineActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".viewholders.PlannerAdapterActivity"></activity>
+        <activity android:name=".viewholder.PlannerAdapterActivity" />
+        <activity
+            android:name=".TestingActivity"
+            android:label="@string/title_activity_testing"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".RepCounterActivity"></activity>
     </application>
 
 </manifest>

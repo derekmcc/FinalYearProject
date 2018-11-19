@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.util.Attributes;
 import com.example.derek.gymbuddy.models.Routine;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -109,13 +112,14 @@ public class PlannerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planner);
-
         setTitle("Routine Details");
+
 //        final DatabaseReference routineRef = getRef(position);
 //        final String routineKey = routineRef.getKey();
         addRoutineBtn = findViewById(R.id.btnAddRoutine);
 
         //"News" here will reflect what you have called your database in Firebase.->>>>>>>>>>>>>>>CHANGE DB NAME
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
 
@@ -125,6 +129,7 @@ public class PlannerActivity extends BaseActivity {
         Query personsQuery = personsRef.orderByKey();
 
         mRecyclerView.hasFixedSize();
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<Routine>().setQuery(personsQuery, Routine.class).build();

@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
-    private Button plannerBtn;
+    private Button plannerBtn, testBtn, repCounterBtn;
     //private FirebaseAuth;
 
     @Override
@@ -23,10 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initialize the FirebaseAuth instance.
-      //  mAuth = FirebaseAuth.getInstance();
-
         plannerBtn = findViewById(R.id.btnPlanner);
+        testBtn = findViewById(R.id.btnTest);
+        repCounterBtn = findViewById(R.id.btnRepCounter);
     }//end onCreate
 
 //    @Override
@@ -51,6 +50,17 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(this, PlannerActivity.class);
             startActivity(i);
         }//end if
+        else if (view.getId() == R.id.btnTest) {
+            //log message
+            Log.d(TAG,"Going to Testing Activity");
+
+            //go to the planner activity
+            Intent i = new Intent(this, TestingActivity.class);
+            startActivity(i);
+        }
+        else if (view.getId() == R.id.btnRepCounter) {
+
+        }
     }//end button listener
 
     @Override
@@ -71,11 +81,4 @@ public class MainActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-//    /**
-//     * Method to create toast messages
-//     * @param message Sentence to be passed
-//     */
-//    private void toastMessage(String message){
-//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-//    }//end toastMessage
 }//end class
