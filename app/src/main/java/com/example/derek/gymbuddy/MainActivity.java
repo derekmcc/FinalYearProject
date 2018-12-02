@@ -59,7 +59,9 @@ public class MainActivity extends BaseActivity {
             startActivity(i);
         }
         else if (view.getId() == R.id.btnRepCounter) {
-
+            //go to the planner activity
+            Intent i = new Intent(this, RepCounterActivity.class);
+            startActivity(i);
         }
     }//end button listener
 

@@ -7,4 +7,14 @@
         android:title="@string/menu_logout"
         android:visible="true"
         app:showAsAction="never" />
+
+    <item android:id="@+id/action_unregister_listener"
+        android:title="action_unregister_listener"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_read_data"
+        android:title="Read step data"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>
