@@ -12,23 +12,26 @@
         <item>Rear Delts</item>
         <item>Triceps Extension</item>
     </string-array>
-    <integer-array name="weight_array">
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>25</item>
-        <item>30</item>
-        <item>40</item>
-        <item>50</item>
-        <item>60</item>
-        <item>70</item>
-        <item>80</item>
-        <item>90</item>
-        <item>100</item>
-        <item>110</item>
-        <item>120</item>
-    </integer-array>
+    <string-array name="weight_array">
+        <item>5 Kg</item>
+        <item>10 Kg</item>
+        <item>15 Kg</item>
+        <item>20 Kg</item>
+        <item>25 Kg</item>
+        <item>30 Kg</item>
+        <item>40 Kg</item>
+        <item>50 Kg</item>
+        <item>60 Kg</item>
+        <item>70 Kg</item>
+        <item>80 Kg</item>
+        <item>90 Kg</item>
+        <item>100 Kg</item>
+        <item>110 Kg</item>
+        <item>120 Kg</item>
+        <item>130 Kg</item>
+        <item>140 Kg</item>
+        <item>150 Kg</item>
+    </string-array>
     <integer-array name="sets_array">
         <item>1</item>
         <item>2</item>
@@ -81,4 +84,5 @@
         functionality.</string>
     <string name="settings">Settings</string>
     <string name="ok">OK</string>
+    <string name="delete">DELETE</string>
 </resources>

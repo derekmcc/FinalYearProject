@@ -7,36 +7,92 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/row_padding_vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/row_padding_vertical"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/row_padding_vertical">
+    android:paddingBottom="@dimen/row_padding_vertical">
 
     <TextView
         android:id="@+id/routineRow"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="routineRow"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/weightRow"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/routineRow"/>
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="50dp"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/setRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="25dp"
+        android:text="setRow"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/repsRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/setRow"/>
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="50dp"
+        android:text="repRow"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/set"
+        android:layout_width="44dp"
+        android:layout_height="24dp"
+        android:layout_alignBaseline="@+id/setRow"
+        android:layout_toEndOf="@+id/repsRow"
+        android:text="Sets"
+        android:textSize="18sp"
+        tools:text="Sets" />
+
+    <TextView
+        android:id="@+id/repLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setRow"
+        android:layout_toEndOf="@+id/repsRow"
+        android:text="Reps"
+        android:textSize="18sp"
+        tools:text="Reps" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="27dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="61dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="38dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/weight" />
 
 </RelativeLayout>

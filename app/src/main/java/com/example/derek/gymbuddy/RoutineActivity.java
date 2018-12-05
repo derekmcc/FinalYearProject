@@ -1,6 +1,7 @@
 package com.example.derek.gymbuddy;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +16,11 @@ import android.widget.Toast;
 import com.example.derek.gymbuddy.models.Routine;
 import com.example.derek.gymbuddy.models.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -83,8 +87,9 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         //create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> routineAdapter = ArrayAdapter.createFromResource(this,
                 R.array.routines_array, android.R.layout.simple_spinner_item);
-        ArrayAdapter <Integer> weightAdapter = new ArrayAdapter<Integer>( this,android.R.layout.simple_spinner_item, weights);
-
+//        ArrayAdapter <Integer> weightAdapter = new ArrayAdapter<Integer>( this,android.R.layout.simple_spinner_item, weights);
+        ArrayAdapter<CharSequence> weightAdapter = ArrayAdapter.createFromResource(this,
+                R.array.weight_array, android.R.layout.simple_spinner_item);
         //specify the layout to use when the list of choices appears
         routineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         weightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -124,7 +129,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
 
     public void userDetails() {
         String selectedRoutine = routineSpinner.getSelectedItem().toString();
-        int selectedWeight = weightSpinner.getSelectedItemPosition();
+        String selectedWeight = weightSpinner.getSelectedItem().toString();
 
         if (userId == null) {
             // User is null, error out
@@ -142,7 +147,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
     public void buttonListener(View view) {
         if (view.getId() == R.id.btnAdd) {
             String selectedRoutine = routineSpinner.getSelectedItem().toString();
-            int selectedWeight = (int) weightSpinner.getSelectedItem();
+            String selectedWeight =  weightSpinner.getSelectedItem().toString();
 
             //conditional statement to set the default values to 1
             if (reps == 0) {
@@ -156,8 +161,6 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
             writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
             //show the loading dialog
             showProgressDialog();
-            //display toast message
-            toastMessage("Routine Successfully Added");
 
             //create an intent to go back to the Planner page
             Intent i = new Intent(this, PlannerActivity.class);
@@ -169,17 +172,41 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         }//end else if
     }//end button listener
 
-    private void writeNewRoutine(String routineName, int weight, int numSets, int numReps) {
+    private void writeNewRoutine(final String routineName, final String weight, final int numSets, final int numReps) {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        String formattedDate = df.format(c);
+        final String formattedDate = df.format(c);
 
-        String key = mDatabase.child("routines").push().getKey();
-        Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
-        Map<String, Object> postValues = routine.toMap();
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
-        mDatabase.updateChildren(childUpdates);
+       // String key = mDatabase.child("routines").push().getKey();
+        final String key = routineName;
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("user-routiness").child(getUid()).hasChild(key)) {
+                    toastMessage("Routine Already Exists, \nEdit Routine Instead");
+                }//end if
+                else {
+                    Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
+                    Map<String, Object> postValues = routine.toMap();
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
+                    mDatabase.updateChildren(childUpdates);
+                    //display toast message
+                    toastMessage("Routine Successfully Added");
+                }//end else
+            }//end onDataChange
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }//end onCancelled
+        });
+//        Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
+//        Map<String, Object> postValues = routine.toMap();
+//        Map<String, Object> childUpdates = new HashMap<>();
+//        childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
+//        mDatabase.updateChildren(childUpdates);
         //DatabaseReference newChildRef = mDatabase.push();
         //String key = newChildRef.getKey();
         //mDatabase.child(userId).child(key).setValue(routine);

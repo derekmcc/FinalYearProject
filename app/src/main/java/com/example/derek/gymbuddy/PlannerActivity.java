@@ -2,11 +2,13 @@ package com.example.derek.gymbuddy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.example.derek.gymbuddy.models.Routine;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -125,8 +128,8 @@ public class PlannerActivity extends BaseActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        DatabaseReference personsRef = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
-        Query personsQuery = personsRef.orderByKey();
+        final DatabaseReference routineRef = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
+        Query personsQuery = routineRef.orderByKey();
 
         mRecyclerView.hasFixedSize();
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -145,7 +148,10 @@ public class PlannerActivity extends BaseActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        toastMessage("Click On " + position);
+                    toastMessage("Click On " + position);
+                     //   DatabaseReference itemtoRemove = mPeopleRVAdapter.getRef(position);
+                       // itemtoRemove.removeValue();
+
 //                        final String url = model.getUrl();
 //                        Intent intent = new Intent(getApplicationContext(), NewsWebView.class);
 //                        intent.putExtra("id", url);
@@ -165,19 +171,42 @@ public class PlannerActivity extends BaseActivity {
         };
 
         mRecyclerView.setAdapter(mPeopleRVAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                //get the position of the item to delete
+                int deletePosition = viewHolder.getLayoutPosition();
+                //pass the position to the delete method
+                deleteRoutine(deletePosition);
+            }//end on swipe
+        }).attachToRecyclerView(mRecyclerView);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mPeopleRVAdapter.startListening();
-    }
+    }//end onStart
 
     @Override
     public void onStop() {
         super.onStop();
         mPeopleRVAdapter.stopListening();
+    }//end onStop
 
-
-    }
+    public void deleteRoutine(int position) {
+        //get a reference to the item to delete
+        DatabaseReference itemToRemove = mPeopleRVAdapter.getRef(position);
+        //delete item from db
+        itemToRemove.removeValue();
+        //display toast
+        toastMessage("Item Removed Successfully!");
+    }//end delete routine method
 }//end class

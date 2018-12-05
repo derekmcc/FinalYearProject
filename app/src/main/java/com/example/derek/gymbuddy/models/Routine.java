@@ -12,7 +12,7 @@ public class Routine {
 
    // public String uid;
     public String routine;
-    public int weight;
+    public String weight;
     public int sets;
     public int reps;
     public String uid;
@@ -21,7 +21,7 @@ public class Routine {
     public  Routine() {
     }
 
-    public Routine(String uid, String routine, int weight, int sets, int reps, String date) {
+    public Routine(String uid, String routine, String weight, int sets, int reps, String date) {
         this.uid = uid;
         this.routine = routine;
         this.weight = weight;
@@ -38,11 +38,11 @@ public class Routine {
         this.routine = routine;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 

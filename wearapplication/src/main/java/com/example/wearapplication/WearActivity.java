@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class WearActivity extends WearableActivity {
+public class WearActivity extends WearableActivity implements SensorEventListener{
 
     public static final String TAG = "WearActivity";
 
@@ -71,7 +71,7 @@ public class WearActivity extends WearableActivity {
         talkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String onClickMessage = "I just sent the handheld a message " + sentMessageNumber++;
+                String onClickMessage = "This is the Wear Activity";
                 mTextView.setText(onClickMessage);
 
                 //Make sure you’re using the same path value//
@@ -89,24 +89,22 @@ public class WearActivity extends WearableActivity {
 //                .build();
 //        mGoogleApiClient.connect();
 //
-//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        mSensorManager.registerListener(this,
-//                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-//                SensorManager.SENSOR_DELAY_NORMAL);
-//        lastUpdate = System.currentTimeMillis();
-//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
-//
-//        } else {
-//            // Failure! No magnetometer.
-//        }
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        lastUpdate = System.currentTimeMillis();
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+
+        } else {
+            // Failure! No magnetometer.
+        }
     }
     public class Receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String onMessageReceived = "I just received a  message from the handheld " + receivedMessageNumber++;
             mTextView.setText(onMessageReceived);
-
-
 
         }
     }
@@ -131,74 +129,66 @@ public class WearActivity extends WearableActivity {
             Task<List<Node>> nodeListTask =
                     Wearable.getNodeClient(getApplicationContext()).getConnectedNodes();
             try {
-
 //Block on a task and get the result synchronously//
-
                 List<Node> nodes = Tasks.await(nodeListTask);
-
 //Send the message to each device//
-
                 for (Node node : nodes) {
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(WearActivity.this).sendMessage(node.getId(), path, message.getBytes());
-
                     try {
-
-
-
                         Integer result = Tasks.await(sendMessageTask);
-
-
 //Handle the errors//
-
                     } catch (ExecutionException exception) {
-
 //TO DO//
-
                     } catch (InterruptedException exception) {
-
 //TO DO//
-
                     }
-
                 }
-
             } catch (ExecutionException exception) {
-
 //TO DO//
-
             } catch (InterruptedException exception) {
-
 //TO DO//
-
             }
         }
     }
-//    @Override
-//    public void onSensorChanged(SensorEvent event) {
-//        String s = ": X: " + event.values[0] + "; Y: " + event.values[1] + "; Z: " + event.values[2] + ";";
-//        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            getAccelerometer(event);
-//        }
-//
-//    }
-//
-//    private void getAccelerometer(SensorEvent event) {
-//        float[] values = event.values;
-//        // Movement
-//        x = values[0];
-//        y = values[1];
-//        z = values[2];
-//
-//        float accelationSquareRoot = (x * x + y * y + z * z)
-//                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-//        long actualTime = System.currentTimeMillis();
-//
-//        lastUpdate = actualTime;
-//        String s = ": X: " + values[0] + "; Y: " + values[1] + "; Z: " + values[2] + ";";
-//        mTextView.setText(s);
-//
-//    }
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        String s = ": X: " + event.values[0] + "; Y: " + event.values[1] + "; Z: " + event.values[2] + ";";
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            getAccelerometer(event);
+        }
+
+    }
+
+    private void getAccelerometer(SensorEvent event) {
+        float[] values = event.values;
+        // Movement
+        x = values[0];
+        y = values[1];
+        z = values[2];
+
+        float accelationSquareRoot = (x * x + y * y + z * z)
+                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+        long actualTime = System.currentTimeMillis();
+        if (x >= -3 && x <= -2.6 && y >= 5 && y <= 5.5 && z >= 9 && z <= 9.5){
+            int rep = 0;
+            mTextView.setText("Rep " + (rep++));
+            String onClickMessage = "Rep " + rep++;
+            mTextView.setText(onClickMessage);
+
+            //Make sure you’re using the same path value//
+            String datapath = "/my_path";
+            new SendMessage(datapath, onClickMessage).start();
+        }
+        lastUpdate = actualTime;
+        String s = ": X: " + values[0] + "; Y: " + values[1] + "; Z: " + values[2] + ";";
+        mTextView.setText(s);
+
+    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 //
 //    private void startDataUpdated() {
 //        scheduler = Executors.newSingleThreadScheduledExecutor();

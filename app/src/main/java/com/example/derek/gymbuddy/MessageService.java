@@ -13,7 +13,6 @@ public class MessageService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d("shauna","Receiver");
         if (messageEvent.getPath().equals("/my_path")) {
             final String message = new String(messageEvent.getData());
 

@@ -63,8 +63,11 @@ public class RepCounterActivity extends BaseActivity  {
     public class Receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("RepCounter", "On recieve called");
-            String message = "I just received a message from the wearable " + receivedMessageNumber++;
+
+            //String in = String.valueOf(intent.hasExtra("message"));
+            String in = intent.getStringExtra("message");
+            android.util.Log.d("ssAs", in);
+            String message = "Yoyo just received a message from the wearable " + receivedMessageNumber++;
             textview.setText(message);
 
 
@@ -120,7 +123,6 @@ public class RepCounterActivity extends BaseActivity  {
                     } catch (ExecutionException exception) {
 
                         //TO DO: Handle the exception//
-
 
                     } catch (InterruptedException exception) {
 

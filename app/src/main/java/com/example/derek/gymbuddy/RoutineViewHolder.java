@@ -24,7 +24,7 @@ public class RoutineViewHolder extends RecyclerView.ViewHolder {
         tvName = (TextView)mView.findViewById(R.id.routineRow);
         tvName.setText(routine);
     }
-    public void setWeight(int weight){
+    public void setWeight(String weight){
         String strWeight = "" + weight;
         tvWeight = (TextView)mView.findViewById(R.id.weightRow);
         tvWeight.setText(strWeight);
