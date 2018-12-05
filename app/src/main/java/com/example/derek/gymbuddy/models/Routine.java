@@ -19,7 +19,7 @@ public class Routine {
     public String date;
 
     public  Routine() {
-    }
+    }//end default constructor
 
     public Routine(String uid, String routine, String weight, int sets, int reps, String date) {
         this.uid = uid;
@@ -28,7 +28,7 @@ public class Routine {
         this.sets = sets;
         this.reps = reps;
         this.date = date;
-    }
+    }//end constructor
 
     public String getRoutine() {
         return routine;
@@ -70,8 +70,6 @@ public class Routine {
         this.uid = uid;
     }
 
-
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -85,5 +83,5 @@ public class Routine {
         result.put("reps", reps);
         result.put("date", date);
         return result;
-    }
+    }//end setData
 }//end class

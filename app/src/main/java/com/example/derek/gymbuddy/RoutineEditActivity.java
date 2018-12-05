@@ -11,10 +11,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.derek.gymbuddy.BaseActivity;
 import com.example.derek.gymbuddy.models.Routine;
-import com.example.derek.gymbuddy.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,19 +21,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoutineActivity extends BaseActivity implements NumberPicker.OnValueChangeListener {
-
+public class RoutineEditActivity extends BaseActivity implements NumberPicker.OnValueChangeListener {
     //global scope variables and components
-    private static final String TAG = "RoutineActivity";
+    private static final String TAG = "RoutineEditActivity";
 
+    private DatabaseReference mRoutineReference;
+    private ValueEventListener mRoutineListener;
+    private String routine, weight;
+    private int sets, reps;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -44,18 +44,21 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
     private Spinner routineSpinner, weightSpinner;
     private NumberPicker setsNumberPicker, repsNumberPicker;
     private Button addBtn, cancelBtn;
-    private int sets;
-    private int reps;
     private String userId, userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_routine);
+        setContentView(R.layout.activity_routine_edit);
+
+        //get routine key from intent
+        routine = getIntent().getStringExtra("routine");
+        weight = getIntent().getStringExtra("weight");
+        reps = getIntent().getIntExtra("reps", 0);
+        sets = getIntent().getIntExtra("sets", 0);
 
         //assign the id's to the components
         routineDetailsTxt = findViewById(R.id.txtRoutineDetails);
-        routineTxt = findViewById(R.id.txtRoutine);
         weightTxt = findViewById(R.id.txtWeight);
         setsTxt = findViewById(R.id.txtSets);
         repsTxt = findViewById(R.id.txtReps);
@@ -84,26 +87,20 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         repsNumberPicker.setOnValueChangedListener(this);
 
         //create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> routineAdapter = ArrayAdapter.createFromResource(this,
-                R.array.routines_array, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> weightAdapter = ArrayAdapter.createFromResource(this,
                 R.array.weight_array, android.R.layout.simple_spinner_item);
         //specify the layout to use when the list of choices appears
-        routineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         weightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //apply the adapter to the spinner
-        routineSpinner.setAdapter(routineAdapter);
         weightSpinner.setAdapter(weightAdapter);
-    }//end onCreate
 
-//    /**
-//     * Method to create toast messages
-//     * @param message Sentence to be passed
-//     */
-//    private void toastMessage(String message){
-//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-//    }//end toastMessage
+        routineDetailsTxt.setText(routine + " Details");
+        int weightPosition = weightAdapter.getPosition(weight);
+        weightSpinner.setSelection(weightPosition);
+        setsNumberPicker.setValue(sets);
+        repsNumberPicker.setValue(reps);
+    }//end on create
 
     /**
      * Listener to respond to changes on the number pickers
@@ -133,18 +130,17 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
             // User is null, error out
             Log.e(TAG, "User " + userId + " is unexpectedly null");
             toastMessage("Error: could not fetch user.");
-        } else {
-
+        }//end if
+        else {
             writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
-        }
-    }
+        }//rnd else
+    }//end userDetails
     /**
      * Method to handle button clicks
      * @param view Item Clicked
      */
     public void buttonListener(View view) {
         if (view.getId() == R.id.btnAdd) {
-            String selectedRoutine = routineSpinner.getSelectedItem().toString();
             String selectedWeight =  weightSpinner.getSelectedItem().toString();
 
             //conditional statement to set the default values to 1
@@ -156,7 +152,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
             }//end if
 
             //add the new routine to the db
-            writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
+            writeNewRoutine(routine,selectedWeight,sets, reps);
             //show the loading dialog
             showProgressDialog();
 
@@ -175,38 +171,39 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         final String formattedDate = df.format(c);
 
-       // String key = mDatabase.child("routines").push().getKey();
         final String key = routineName;
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("user-routiness").child(getUid()).hasChild(key)) {
-                    toastMessage("Routine Already Exists, \nEdit Routine Instead");
-                }//end if
-                else {
-                    Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
-                    Map<String, Object> postValues = routine.toMap();
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
-                    mDatabase.updateChildren(childUpdates);
-                    //display toast message
-                    toastMessage("Routine Successfully Added");
-                }//end else
-            }//end onDataChange
+        Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
+        Map<String, Object> postValues = routine.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
+        mDatabase.updateChildren(childUpdates);
+        //display toast message
+        toastMessage("Routine Successfully Updated");
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }//end onCancelled
-        });
-//        Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
-//        Map<String, Object> postValues = routine.toMap();
-//        Map<String, Object> childUpdates = new HashMap<>();
-//        childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
-//        mDatabase.updateChildren(childUpdates);
-        //DatabaseReference newChildRef = mDatabase.push();
-        //String key = newChildRef.getKey();
-        //mDatabase.child(userId).child(key).setValue(routine);
+        // String key = mDatabase.child("routines").push().getKey();
+//        final String key = routineName;
+//        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+//        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.child("user-routiness").child(getUid()).hasChild(key)) {
+//                    toastMessage("Routine Already Exists, \nEdit Routine Instead");
+//                }//end if
+//                else {
+//                    Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
+//                    Map<String, Object> postValues = routine.toMap();
+//                    Map<String, Object> childUpdates = new HashMap<>();
+//                    childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
+//                    mDatabase.updateChildren(childUpdates);
+//                    //display toast message
+//                    toastMessage("Routine Successfully Updated");
+//                }//end else
+//            }//end onDataChange
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }//end onCancelled
+//        });
     }
 }//end class

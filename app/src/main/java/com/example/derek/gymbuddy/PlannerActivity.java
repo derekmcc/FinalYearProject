@@ -44,46 +44,10 @@ public class PlannerActivity extends BaseActivity {
 
     private FirebaseRecyclerAdapter <Routine, RoutineViewHolder> mPeopleRVAdapter;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_planner);
-//
-////        Routine routine = new Routine("Arm Curls",100,4,10);
-////        routineList.add(routine);
-////        toastMessage(routineList.get(0).routine);
-//
-//        addRoutineBtn = findViewById(R.id.btnAddRoutine);
-//        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-//
-//        // use this setting to improve performance if you know that changes
-//        // in content do not change the layout size of the RecyclerView
-//        mRecyclerView.setHasFixedSize(true);
-//
-//        // use a linear layout manager
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//
-//        // specify an adapter (see also next example)
-//        mAdapter = new PlannerAdapterActivity(routineList);
-//        mRecyclerView.setAdapter(mAdapter);
-//        routineListPre();
-//    }//end onCreate method
-//
-//    /**
-//     * Method to create toast messages
-//     * @param message Sentence to be passed
-//     */
-//    private void toastMessage(String message){
-//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-//    }//end toastMessage
-//
-//    /**
-//     * Method to handle button clicks
-//     * @param view Item Clicked
-//     */
+    /**
+     * Method to handle button clicks
+     * @param view Item Clicked
+     */
     public void buttonListener(View view) {
         //check which button was clicked
         if (view.getId() == R.id.btnAddRoutine) {
@@ -94,22 +58,6 @@ public class PlannerActivity extends BaseActivity {
             startActivity(i);
         }//end if
     }//end button listener
-//
-//    public void routineListPre(){
-//        Routine routine = new Routine("Arm Curls",100,4,10);
-//        routineList.add(routine);
-//        routine = new Routine("LegCurls",100,4,10);
-//        routineList.add(routine);
-//        routine = new Routine("Back Curls",50,7,1);
-//        routineList.add(routine);
-//        routine = new Routine("Tricep Curls",60,3,4);
-//        routineList.add(routine);
-//        routine = new Routine("Bicep Curls",10,2,7);
-//        routineList.add(routine);
-//        routine = new Routine("Knee Curls",55,5,12);
-//        routineList.add(routine);
-//        mAdapter.notifyDataSetChanged();
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +87,7 @@ public class PlannerActivity extends BaseActivity {
 
         mPeopleRVAdapter = new FirebaseRecyclerAdapter<Routine, RoutineViewHolder>(personsOptions) {
             @Override
-            protected void onBindViewHolder(RoutineViewHolder holder, final int position, final Routine model) {
+            protected void onBindViewHolder(final RoutineViewHolder holder, final int position, final Routine model) {
                 holder.setRoutine(model.getRoutine());
                 holder.setWeight(model.getWeight());
                 holder.setSets(model.getSets());
@@ -148,17 +96,22 @@ public class PlannerActivity extends BaseActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    toastMessage("Click On " + position);
-                     //   DatabaseReference itemtoRemove = mPeopleRVAdapter.getRef(position);
-                       // itemtoRemove.removeValue();
+                        String routine, weight;
+                        int reps, sets;
+                        routine = model.getRoutine();
+                        weight = model.getWeight();
+                        reps = model.getReps();
+                        sets = model.getSets();
 
-//                        final String url = model.getUrl();
-//                        Intent intent = new Intent(getApplicationContext(), NewsWebView.class);
-//                        intent.putExtra("id", url);
-//                        startActivity(intent);
-                    }
+                        Intent intent = new Intent(getApplicationContext(), RoutineEditActivity.class);
+                        intent.putExtra("routine", routine);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("reps", reps);
+                        intent.putExtra("sets", sets);
+                        startActivity(intent);
+                    }//end onClick
                 });
-            }
+            }//end onBindViewHolder
 
             @Override
             public RoutineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -167,7 +120,7 @@ public class PlannerActivity extends BaseActivity {
                         .inflate(R.layout.activity_planner_adapter, parent, false);
 
                 return new RoutineViewHolder(view);
-            }
+            }//end RoutineViewHolder
         };
 
         mRecyclerView.setAdapter(mPeopleRVAdapter);
@@ -177,7 +130,7 @@ public class PlannerActivity extends BaseActivity {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
                 return false;
-            }
+            }//end onMove
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -185,7 +138,7 @@ public class PlannerActivity extends BaseActivity {
                 int deletePosition = viewHolder.getLayoutPosition();
                 //pass the position to the delete method
                 deleteRoutine(deletePosition);
-            }//end on swipe
+            }//end onSwipe
         }).attachToRecyclerView(mRecyclerView);
     }
 
@@ -209,4 +162,11 @@ public class PlannerActivity extends BaseActivity {
         //display toast
         toastMessage("Item Removed Successfully!");
     }//end delete routine method
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(PlannerActivity.this, MainActivity.class));
+        finish();
+    }//end onBackPressed
 }//end class
