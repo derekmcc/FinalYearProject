@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -31,6 +33,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -58,28 +61,31 @@ public class WearActivity extends WearableActivity implements SensorEventListene
     int receivedMessageNumber = 1;
     int sentMessageNumber = 1;
     Button talkButton;
+    int rep = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wear);
 
         mTextView = (TextView) findViewById(R.id.text);
-        talkButton =  findViewById(R.id.btn);
+       // talkButton =  findViewById(R.id.btn);
         // Enables Always-on
         setAmbientEnabled();
-
-        talkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String onClickMessage = "This is the Wear Activity";
-                mTextView.setText(onClickMessage);
-
-                //Make sure you’re using the same path value//
-                String datapath = "/my_path";
-                new SendMessage(datapath, onClickMessage).start();
-
-            }
-        });
+//--------------------------For Button------------------------------
+//        talkButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String onClickMessage = "This is the Wear Activity";
+//                mTextView.setText(onClickMessage);
+//
+//                //Make sure you’re using the same path value//
+//                String datapath = "/my_path";
+//                new SendMessage(datapath, onClickMessage).start();
+//
+//            }
+//        });
+//----------------------------------------------------------------
         // Register the local broadcast receiver
         IntentFilter newFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
@@ -124,28 +130,27 @@ public class WearActivity extends WearableActivity implements SensorEventListene
 
         public void run() {
 
-//Get all the nodes//
-
+            //Get all the nodes//
             Task<List<Node>> nodeListTask =
                     Wearable.getNodeClient(getApplicationContext()).getConnectedNodes();
             try {
-//Block on a task and get the result synchronously//
+                //Block on a task and get the result synchronously//
                 List<Node> nodes = Tasks.await(nodeListTask);
-//Send the message to each device//
+                //Send the message to each device//
                 for (Node node : nodes) {
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(WearActivity.this).sendMessage(node.getId(), path, message.getBytes());
                     try {
                         Integer result = Tasks.await(sendMessageTask);
-//Handle the errors//
+                    //Handle the errors//
                     } catch (ExecutionException exception) {
-//TO DO//
+                        //TO DO//
                     } catch (InterruptedException exception) {
-//TO DO//
+                        //TO DO//
                     }
                 }
             } catch (ExecutionException exception) {
-//TO DO//
+                //TO DO//
             } catch (InterruptedException exception) {
 //TO DO//
             }
@@ -161,29 +166,53 @@ public class WearActivity extends WearableActivity implements SensorEventListene
     }
 
     private void getAccelerometer(SensorEvent event) {
+        //------------------FOR SHOWING X Y Z ------------------------------
+//        float[] values = event.values;
+//        // Movement
+//        x = values[0];
+//        y = values[1];
+//        z = values[2];
+//
+//        float accelationSquareRoot = (x * x + y * y + z * z)
+//                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+//        long actualTime = System.currentTimeMillis();
+//        if (x >= -3 && x <= -2.6 && y >= 5 && y <= 5.5 && z >= 9 && z <= 9.5){
+//            int rep = 0;
+//            mTextView.setText("Rep " + (rep++));
+//            String onClickMessage = "Rep " + rep++;
+//            mTextView.setText(onClickMessage);
+//
+//            //Make sure you’re using the same path value//
+//            String datapath = "/my_path";
+//            new SendMessage(datapath, onClickMessage).start();
+//        }
+//        lastUpdate = actualTime;
+//        String s = ": X: " + values[0] + "; Y: " + values[1] + "; Z: " + values[2] + ";";
+//        mTextView.setText(s);
+        //------------------FOR SHOWING X Y Z ------------------------------
         float[] values = event.values;
         // Movement
-        x = values[0];
-        y = values[1];
-        z = values[2];
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
 
         float accelationSquareRoot = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
         long actualTime = System.currentTimeMillis();
-        if (x >= -3 && x <= -2.6 && y >= 5 && y <= 5.5 && z >= 9 && z <= 9.5){
-            int rep = 0;
-            mTextView.setText("Rep " + (rep++));
-            String onClickMessage = "Rep " + rep++;
-            mTextView.setText(onClickMessage);
-
+        if (accelationSquareRoot >= 6) {
+            if (actualTime - lastUpdate < 200) {
+                return;
+            }
+            lastUpdate = actualTime;
+            rep++;
+            String numberOfReps = "" + rep;
+            mTextView.setText(numberOfReps);
             //Make sure you’re using the same path value//
             String datapath = "/my_path";
-            new SendMessage(datapath, onClickMessage).start();
+            Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+            Objects.requireNonNull(vibrator).vibrate(100);
+            new SendMessage(datapath, numberOfReps).start();
         }
-        lastUpdate = actualTime;
-        String s = ": X: " + values[0] + "; Y: " + values[1] + "; Z: " + values[2] + ";";
-        mTextView.setText(s);
-
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

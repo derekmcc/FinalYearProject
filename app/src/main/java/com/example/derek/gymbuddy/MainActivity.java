@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         plannerBtn = findViewById(R.id.btnPlanner);
-        testBtn = findViewById(R.id.btnTest);
+     //   testBtn = findViewById(R.id.btnTest);
         repCounterBtn = findViewById(R.id.btnRepCounter);
     }//end onCreate
 
@@ -50,37 +50,37 @@ public class MainActivity extends BaseActivity {
             Intent i = new Intent(this, PlannerActivity.class);
             startActivity(i);
         }//end if
-        else if (view.getId() == R.id.btnTest) {
-            //log message
-            Log.d(TAG,"Going to Testing Activity");
-
+//        else if (view.getId() == R.id.btnTest) {
+//            //log message
+//            Log.d(TAG,"Going to Testing Activity");
+//
+//            //go to the planner activity
+//            Intent i = new Intent(this, TestingActivity.class);
+//            startActivity(i);
+//        }
+        else if (view.getId() == R.id.btnRepCounter) {
             //go to the planner activity
             Intent i = new Intent(this, TestingActivity.class);
             startActivity(i);
         }
-        else if (view.getId() == R.id.btnRepCounter) {
-            //go to the planner activity
-            Intent i = new Intent(this, RepCounterActivity.class);
-            startActivity(i);
-        }
     }//end button listener
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.action_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int i = item.getItemId();
+//        if (i == R.id.action_logout) {
+//            FirebaseAuth.getInstance().signOut();
+//            startActivity(new Intent(this, LoginActivity.class));
+//            finish();
+//            return true;
+//        } else {
+//            return super.onOptionsItemSelected(item);
+//        }
+//    }
 }//end class

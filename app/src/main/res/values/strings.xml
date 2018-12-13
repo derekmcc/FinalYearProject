@@ -76,8 +76,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="menu_logout">Log out</string>
     <string name="title_activity_testing">TestingActivity</string>
-
-    <string name="intro_text">Hi! Let\'s listen to some available data sources! Check the menu for more actions!</string>
     <string name="action_unregister_listener">Unregister listener</string>
     <string name="action_settings">Settings</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
@@ -85,4 +83,11 @@
     <string name="settings">Settings</string>
     <string name="ok">OK</string>
     <string name="delete">DELETE</string>
+    <string name="set">Set 1</string>
+    <string name="rep">Rep 0</string>
+    <string name="reps_remaining">Reps Remaining</string>
+    <string name="weight_logo">Weight logo</string>
+    <string name="no_records">No Records</string>
+    <string name="rep_counter">Rep Counter</string>
+    <string name="workout_planner">Workout Planner</string>
 </resources>

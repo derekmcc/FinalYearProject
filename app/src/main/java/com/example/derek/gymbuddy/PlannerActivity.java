@@ -1,10 +1,9 @@
 package com.example.derek.gymbuddy;
 
-import android.content.Intent;
+        import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,15 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.util.Attributes;
 import com.example.derek.gymbuddy.models.Routine;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -42,7 +36,7 @@ public class PlannerActivity extends BaseActivity {
     private List<Routine> routineList = new ArrayList<>();
     private String mRoutineKey;
 
-    private FirebaseRecyclerAdapter <Routine, RoutineViewHolder> mPeopleRVAdapter;
+    private FirebaseRecyclerAdapter <Routine, RoutineViewHolder> mRoutineRVAdapter;
 
     /**
      * Method to handle button clicks
@@ -74,18 +68,18 @@ public class PlannerActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
 
         final DatabaseReference routineRef = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
-        Query personsQuery = routineRef.orderByKey();
+        Query routineQuery = routineRef.orderByKey();
 
         mRecyclerView.hasFixedSize();
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<Routine>().setQuery(personsQuery, Routine.class).build();
+        FirebaseRecyclerOptions routineOptions = new FirebaseRecyclerOptions.Builder<Routine>().setQuery(routineQuery, Routine.class).build();
 
-        mPeopleRVAdapter = new FirebaseRecyclerAdapter<Routine, RoutineViewHolder>(personsOptions) {
+        mRoutineRVAdapter = new FirebaseRecyclerAdapter<Routine, RoutineViewHolder>(routineOptions) {
             @Override
             protected void onBindViewHolder(final RoutineViewHolder holder, final int position, final Routine model) {
                 holder.setRoutine(model.getRoutine());
@@ -123,7 +117,7 @@ public class PlannerActivity extends BaseActivity {
             }//end RoutineViewHolder
         };
 
-        mRecyclerView.setAdapter(mPeopleRVAdapter);
+        mRecyclerView.setAdapter(mRoutineRVAdapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -145,18 +139,18 @@ public class PlannerActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mPeopleRVAdapter.startListening();
+        mRoutineRVAdapter.startListening();
     }//end onStart
 
     @Override
     public void onStop() {
         super.onStop();
-        mPeopleRVAdapter.stopListening();
+        mRoutineRVAdapter.stopListening();
     }//end onStop
 
     public void deleteRoutine(int position) {
         //get a reference to the item to delete
-        DatabaseReference itemToRemove = mPeopleRVAdapter.getRef(position);
+        DatabaseReference itemToRemove = mRoutineRVAdapter.getRef(position);
         //delete item from db
         itemToRemove.removeValue();
         //display toast

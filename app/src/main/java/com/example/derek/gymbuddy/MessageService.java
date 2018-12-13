@@ -20,8 +20,9 @@ public class MessageService extends WearableListenerService {
             messageIntent.setAction(Intent.ACTION_SEND);
             messageIntent.putExtra("message", message);
             LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);
-        } else {
+        }//end if
+        else {
             super.onMessageReceived(messageEvent);
-        }
-    }
-}
+        }//end else
+    }//end onMessageRecieve
+}//end class

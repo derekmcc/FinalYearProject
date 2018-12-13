@@ -97,14 +97,6 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         weightSpinner.setAdapter(weightAdapter);
     }//end onCreate
 
-//    /**
-//     * Method to create toast messages
-//     * @param message Sentence to be passed
-//     */
-//    private void toastMessage(String message){
-//        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
-//    }//end toastMessage
-
     /**
      * Listener to respond to changes on the number pickers
      * @param picker the number picker been selected
