@@ -94,7 +94,7 @@ public class RepCounterActivity extends BaseActivity  {
             }
         });
         progressBar.setMax(reps);
-
+        talkClick();//For calling activity---------------------------
         IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
@@ -192,12 +192,12 @@ public class RepCounterActivity extends BaseActivity  {
             String message = "Rep " + receivedMessageNumber++;
 
 
-        }//end onRecieve
-    }//end Reciever
+        }//end onReceive
+    }//end Receiver
 
 
-    public void talkClick(View v) {
-        Log.d("RepCounter", "On recieve called");
+    public void talkClick() {
+        Log.d("RepCounter", "On receive called");
         String message = "Sending message.... ";
         numRepsTxt.setText(message);
         new NewThread("/my_path", message).start();

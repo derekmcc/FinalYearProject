@@ -11,8 +11,11 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 public class MessageService extends WearableListenerService {
 
+    public static final String TAG = "MessageServiceApp";
+
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+        Log.d(TAG, "Message Received");
         if (messageEvent.getPath().equals("/my_path")) {
             final String message = new String(messageEvent.getData());
 

@@ -1,43 +1,32 @@
 package com.example.wearapplication;
 
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class WearActivity extends WearableActivity implements SensorEventListener{
 
@@ -52,16 +41,19 @@ public class WearActivity extends WearableActivity implements SensorEventListene
     ScheduledExecutorService mUpdateScheduler;
     private static final String PATH_SENSOR_DATA = "/sensor_data";
     ScheduledExecutorService scheduler;
-    float x,y,z;
+    float decreasing = 0;
     private static final String KEY_ACC_X = "acc_x";
     private static final String KEY_ACC_Y = "acc_y";
     private static final String KEY_ACC_Z = "acc_z";
     private static final long CONNECTION_TIME_OUT_MS = 100;
     private String nodeId;
     int receivedMessageNumber = 1;
-    int sentMessageNumber = 1;
-    Button talkButton;
+    //int sentMessageNumber = 1;
+   // Button talkButton;
     int rep = 0;
+    private boolean yFlag = false;
+    private boolean zFlag = false;
+    boolean state = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +78,8 @@ public class WearActivity extends WearableActivity implements SensorEventListene
 //            }
 //        });
 //----------------------------------------------------------------
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         // Register the local broadcast receiver
         IntentFilter newFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
@@ -95,6 +89,22 @@ public class WearActivity extends WearableActivity implements SensorEventListene
 //                .build();
 //        mGoogleApiClient.connect();
 //
+
+//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        mSensorManager.registerListener(this,
+//                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+//                SensorManager.SENSOR_DELAY_NORMAL);
+//        lastUpdate = System.currentTimeMillis();
+//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+//
+//        } else {
+//            // Failure! No magnetometer.
+//        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -106,12 +116,24 @@ public class WearActivity extends WearableActivity implements SensorEventListene
             // Failure! No magnetometer.
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSensorManager.unregisterListener(this);
+    }
+
     public class Receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String onMessageReceived = "I just received a  message from the handheld " + receivedMessageNumber++;
             mTextView.setText(onMessageReceived);
-
         }
     }
 
@@ -156,6 +178,7 @@ public class WearActivity extends WearableActivity implements SensorEventListene
             }
         }
     }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         String s = ": X: " + event.values[0] + "; Y: " + event.values[1] + "; Z: " + event.values[2] + ";";
@@ -165,153 +188,110 @@ public class WearActivity extends WearableActivity implements SensorEventListene
 
     }
 
+    /**
+     * Method to get the data from the wearables accelerometer
+     * @param event Sensor data of the X, Y & Z coordinates
+     */
     private void getAccelerometer(SensorEvent event) {
-        //------------------FOR SHOWING X Y Z ------------------------------
-//        float[] values = event.values;
-//        // Movement
-//        x = values[0];
-//        y = values[1];
-//        z = values[2];
-//
-//        float accelationSquareRoot = (x * x + y * y + z * z)
-//                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-//        long actualTime = System.currentTimeMillis();
-//        if (x >= -3 && x <= -2.6 && y >= 5 && y <= 5.5 && z >= 9 && z <= 9.5){
-//            int rep = 0;
-//            mTextView.setText("Rep " + (rep++));
-//            String onClickMessage = "Rep " + rep++;
-//            mTextView.setText(onClickMessage);
-//
-//            //Make sure you’re using the same path value//
-//            String datapath = "/my_path";
-//            new SendMessage(datapath, onClickMessage).start();
-//        }
-//        lastUpdate = actualTime;
-//        String s = ": X: " + values[0] + "; Y: " + values[1] + "; Z: " + values[2] + ";";
-//        mTextView.setText(s);
-        //------------------FOR SHOWING X Y Z ------------------------------
-        float[] values = event.values;
-        // Movement
-        float x = values[0];
-        float y = values[1];
-        float z = values[2];
+        //assign the accelerometer X,Y,Z data
+        float xValue = currentPos(event)[0];
+        float yValue = currentPos(event)[1];
+        float zValue = currentPos(event)[2];
 
-        float accelationSquareRoot = (x * x + y * y + z * z)
-                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-        long actualTime = System.currentTimeMillis();
-        if (accelationSquareRoot >= 6) {
-            if (actualTime - lastUpdate < 200) {
-                return;
-            }
-            lastUpdate = actualTime;
-            rep++;
-            String numberOfReps = "" + rep;
-            mTextView.setText(numberOfReps);
-            //Make sure you’re using the same path value//
-            String datapath = "/my_path";
-            Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-            Objects.requireNonNull(vibrator).vibrate(100);
-            new SendMessage(datapath, numberOfReps).start();
-        }
-    }
+        //while the x value is decreasing(moving watch down)
+        while(xValue < decreasing) {
+            //assign x value to decreasing
+            decreasing = xValue;
+        }//end while
+
+        /**
+         * Window for Y value
+         *
+         * if the Y value is in the range of the window, set the Y flag to true
+         */
+        if (yValue <= -1.3f && yValue >= -3.6f) {
+            //set flag to true
+            yFlag = true;
+        }//end if
+
+        /**
+         * Window for Z value
+         *
+         * if the Z value is in the range of the window, set the Z flag to true
+         */
+        if (zValue >= -1.5f && zValue <= 1.5f) {
+            //set flag to true
+            zFlag = true;
+        }//end if
+
+        // the value will be the effect of gravity on the x-axis of the device
+        // the value of 9.8 means that the device is perpendicular upwards relative to the x-axis
+        // the value of 0 means that the device is parallel relative to the x-axis
+        if(xValue > decreasing) {
+            //if decreasing is less than 8
+            if (decreasing < 8.0f) {
+                //if state is false
+               if (!state) {
+                   //if the X, Y & Z coordinates are within the window range
+                    if (xValue > 8.5f && xValue <9.8f && yFlag && zFlag) {
+                        //call the onRepIncrease method
+                        onRepIncrease();
+                        //re-initialize the variables
+                        state = !state;
+                        decreasing = 0;
+                        yFlag = false;
+                        zFlag = false;
+                    }//end if
+                //if state is true
+                } else {
+                    //if the X value is less than 0
+                    if (xValue < 0.0f) {
+                        //set state to true
+                        state = !state;
+                    }//end if
+                }//end else
+            }//end if
+        }//end if
+    }//end getAccelerometer method
+
+    /**
+     * Method to increment reps and pass this to the mobile device
+     */
+    public void onRepIncrease() {
+        //increment rep
+        rep++;
+        //create a vibrate object
+        Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        //make the watch vibrate
+        Objects.requireNonNull(vibrator).vibrate(100);
+        //key for passing data
+        String datapath = "/my_path";
+        //string value of the number of reps
+        String numberOfReps = "" + rep;
+        //send the number of reps
+        new SendMessage(datapath, numberOfReps).start();
+        //set the number of reps on the wearables screen
+        mTextView.setText(numberOfReps);
+    }//end onRepIncrease
+
+    /**
+     * Method to get the current position of the X, Y & Z coordinates from the accelerometer
+     * @param event Sensor data of the X, Y & Z coordinates
+     * @return Accelerometer coordinates
+     */
+    private float[] currentPos(SensorEvent event) {
+        //float array to hold the accelerometer data
+        float sensorData[] = new float[3];
+        //assign the X, Y & Z values to the array
+        sensorData[0] = event.values[0];
+        sensorData[1] = event.values[1];
+        sensorData[2] = event.values[2];
+
+        //return the sensor data
+        return sensorData;
+    }//end currentPosition
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-//
-//    private void startDataUpdated() {
-//        scheduler = Executors.newSingleThreadScheduledExecutor();
-//
-//        scheduler.scheduleAtFixedRate
-//                (new Runnable() {
-//                    public void run() {
-//                        updateData();
-//                    }
-//                }, 5, 3, TimeUnit.SECONDS);
-//    }
-//    private void updateData() {
-//        PutDataMapRequest dataMap = PutDataMapRequest.create(PATH_SENSOR_DATA);
-//        dataMap.getDataMap().putFloat(KEY_ACC_X, x);
-//        dataMap.getDataMap().putFloat(KEY_ACC_Y, y);
-//        dataMap.getDataMap().putFloat(KEY_ACC_Z, z);
-//
-//        PutDataRequest request = dataMap.asPutDataRequest();
-//        Wearable.DataApi.putDataItem(mGoogleApiClient, request);
-//    }
-//    @Override
-//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        // register this class as a listener for the orientation and
-//        // accelerometer sensors
-//        mSensorManager.registerListener(this,
-//                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-//                SensorManager.SENSOR_DELAY_NORMAL);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        // unregister listener
-//        super.onPause();
-//        mSensorManager.unregisterListener(this);
-//    }
-//
-//    /**
-//     * Initializes the GoogleApiClient and gets the Node ID of the connected device.
-//     */
-//    private void initApi() {
-//        mGoogleApiClient = getGoogleApiClient(this);
-//        retrieveDeviceNode();
-//    }
-//
-//
-//    /**
-//     * Returns a GoogleApiClient that can access the Wear API.
-//     * @param context
-//     * @return A GoogleApiClient that can make calls to the Wear API
-//     */
-//    private GoogleApiClient getGoogleApiClient(Context context) {
-//        return new GoogleApiClient.Builder(context)
-//                .addApi(Wearable.API)
-//                .build();
-//    }
-//
-//    /**
-//     * Connects to the GoogleApiClient and retrieves the connected device's Node ID. If there are
-//     * multiple connected devices, the first Node ID is returned.
-//     */
-//    private void retrieveDeviceNode() {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mGoogleApiClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
-//                NodeApi.GetConnectedNodesResult result =
-//                        Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
-//                List<Node> nodes = result.getNodes();
-//                if (nodes.size() > 0) {
-//                    nodeId = nodes.get(0).getId();
-//                }
-//                mGoogleApiClient.disconnect();
-//            }
-//        }).start();
-//    }
-//    private void sendToast() {
-//        GoogleApiClient client = getGoogleApiClient(this);
-//        if (nodeId != null) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mGoogleApiClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
-//                    Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, "Hello From Watch", null);
-//                    mGoogleApiClient.disconnect();
-//                }
-//            }).start();
-//        }
-//    }
-
-
 }
