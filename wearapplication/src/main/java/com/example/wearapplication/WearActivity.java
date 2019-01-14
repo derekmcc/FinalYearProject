@@ -15,10 +15,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Node;
@@ -27,184 +25,199 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
+
 
 public class WearActivity extends WearableActivity implements SensorEventListener{
 
     public static final String TAG = "WearActivity";
-    private static final String CONNECT = "/connect";
     private TextView mTextView;
     SensorManager mSensorManager;
-    private Sensor mHeartrateSensor;
 
-    private long lastUpdate;
-    private GoogleApiClient mGoogleApiClient;
-    ScheduledExecutorService mUpdateScheduler;
-    private static final String PATH_SENSOR_DATA = "/sensor_data";
-    ScheduledExecutorService scheduler;
+//    private long lastUpdate;
+//    private GoogleApiClient mGoogleApiClient;
+//    ScheduledExecutorService mUpdateScheduler;
+//    private static final String PATH_SENSOR_DATA = "/sensor_data";
+//    ScheduledExecutorService scheduler;
     float decreasing = 0;
-    private static final String KEY_ACC_X = "acc_x";
-    private static final String KEY_ACC_Y = "acc_y";
-    private static final String KEY_ACC_Z = "acc_z";
-    private static final long CONNECTION_TIME_OUT_MS = 100;
-    private String nodeId;
-    int receivedMessageNumber = 1;
-    //int sentMessageNumber = 1;
-   // Button talkButton;
+//    private static final String KEY_ACC_X = "acc_x";
+//    private static final String KEY_ACC_Y = "acc_y";
+//    private static final String KEY_ACC_Z = "acc_z";
+//    private static final long CONNECTION_TIME_OUT_MS = 100;
+//    private String nodeId;
+//    int receivedMessageNumber = 1;
     int rep = 0;
     private boolean yFlag = false;
     private boolean zFlag = false;
-    private boolean screenOff = false;
     boolean state = false;
 
+    /**
+     * Initialize activity
+     * @param savedInstanceState Bundle variable
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wear);
 
+        //assign components to variables
         mTextView = (TextView) findViewById(R.id.text);
-       // talkButton =  findViewById(R.id.btn);
-        // Enables Always-on
+
+        //enables always-on
         setAmbientEnabled();
-//--------------------------For Button------------------------------
-//        talkButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String onClickMessage = "This is the Wear Activity";
-//                mTextView.setText(onClickMessage);
-//
-//                //Make sure you’re using the same path value//
-//                String datapath = "/my_path";
-//                new SendMessage(datapath, onClickMessage).start();
-//
-//            }
-//        });
-//----------------------------------------------------------------
+
+        //object to check if the screen is on
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+        //assertion
+        assert powerManager != null;
+        //assign the value of the screen being on true/false
         boolean isScreenOn = powerManager.isInteractive();
+        //if the screen is not on
         if (!isScreenOn) {
+            //turn on the screen
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        }
-        if (!screenOff) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-        // Register the local broadcast receiver
+        }//end if
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //register the local broadcast receiver
         IntentFilter newFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, newFilter);
+    }//end onCreate method
 
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addApi(com.google.android.gms.wearable.Wearable.API)
-//                .build();
-//        mGoogleApiClient.connect();
-//
-
-//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        mSensorManager.registerListener(this,
-//                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-//                SensorManager.SENSOR_DELAY_NORMAL);
-//        lastUpdate = System.currentTimeMillis();
-//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
-//
-//        } else {
-//            // Failure! No magnetometer.
-//        }
-    }
-
+    /**
+     *
+     */
     @Override
     protected void onStart() {
         super.onStart();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        assert mSensorManager != null;
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
-        lastUpdate = System.currentTimeMillis();
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+       // lastUpdate = System.currentTimeMillis();
+//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+//
+//        }
+//        else {
+//            // Failure! No magnetometer.
+//        }
+    }//end onStart method
 
-        } else {
-            // Failure! No magnetometer.
-        }
-    }
-
+    /**
+     * Method to unregister sensor listeners when the app is not in the foreground
+     */
     @Override
     protected void onPause() {
         super.onPause();
+        //unregister the sensor listener
         mSensorManager.unregisterListener(this);
-    }
+    }//end onPause method
 
+    /**
+     * Method to unregister sensor listeners when the app is stopped
+     */
     @Override
     protected void onStop() {
         super.onStop();
+        //unregister the sensor listener
         mSensorManager.unregisterListener(this);
-    }
+    }//end onStop method
 
+    /**
+     * Receive intents from the mobile device
+     */
     public class Receiver extends BroadcastReceiver {
+        /**
+         * This method is called when the receiver receives an intent
+         * @param context App context
+         * @param intent Intent object
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String onMessageReceived = "I just received a  message from the handheld " + receivedMessageNumber++;
-            mTextView.setText(onMessageReceived);
+            //String onMessageReceived = "T " + receivedMessageNumber++;
+            //mTextView.setText(onMessageReceived);
+            //the message being passed from the mobile device
+            String in = intent.getStringExtra("message");
+            //print the message to the log
+            Log.d(TAG,"Message: " + in);
+            //if the message is disconnect
+            if (in.matches("disconnect")) {
+                //unregister the sensor listener
+                mSensorManager.unregisterListener((SensorEventListener) context);
+                //finish the app
+                finish();
+                //close the app
+                System.exit(0);
+            }//end if
+        }//end onReceive
+    }//on inner class Receiver
 
-            String in = intent.getStringExtra("disconnect");
-            Log.d("YOO",in + " ++++++++++++++++++++++");
-//            if (in.matches("disconnect")){
-//                mSensorManager.unregisterListener((SensorEventListener) context);
-//                screenOff = true;
-//                finish();
-//                System.exit(0);
-//            }
-        }
-    }
-
+    /**
+     * Class to send messages to the mobile device
+     */
     class SendMessage extends Thread {
+        //placeholder for the path of the message (declared in manifest)
         String path;
+        //placeholder for the message contents
         String message;
 
-//Constructor///
+        /**
+         * Default constructor
+         * @param path Data Path
+         * @param message Message contents
+         */
+        SendMessage(String path, String message) {
+            this.path = path;
+            this.message = message;
+        }//end sendMessage method
 
-        SendMessage(String p, String m) {
-            path = p;
-            message = m;
-        }
+        ////
 
-//Send the message via the thread. This will send the message to all the currently-connected devices//
-
+        /**
+         * Send the message via the thread. This will send the message to all the currently-connected devices
+         */
         public void run() {
-
-            //Get all the nodes//
+            //get all the nodes
             Task<List<Node>> nodeListTask =
                     Wearable.getNodeClient(getApplicationContext()).getConnectedNodes();
             try {
-                //Block on a task and get the result synchronously//
+                //block on a task and get the result synchronously
                 List<Node> nodes = Tasks.await(nodeListTask);
-                //Send the message to each device//
+                //send the message to each device
                 for (Node node : nodes) {
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(WearActivity.this).sendMessage(node.getId(), path, message.getBytes());
                     try {
                         Integer result = Tasks.await(sendMessageTask);
-                    //Handle the errors//
+                    //handle the errors
                     } catch (ExecutionException exception) {
-                        //TO DO//
+                        Log.e(TAG, "Execution Exception: " + exception);
                     } catch (InterruptedException exception) {
-                        //TO DO//
-                    }
-                }
+                        Log.e(TAG, "Interrupted Exception: " + exception);
+                    }//end catch
+                }//end loop
             } catch (ExecutionException exception) {
-                //TO DO//
+                Log.e(TAG, "Execution Exception: " + exception);
             } catch (InterruptedException exception) {
-//TO DO//
-            }
-        }
-    }
+                Log.e(TAG, "Interrupted Exception: " + exception);
+            }//end catch
+        }//end run method
+    }//end inner class SendMessage
 
+    /**
+     * Method to listen to sensors
+     * @param event Data from the sensors
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        String s = ": X: " + event.values[0] + "; Y: " + event.values[1] + "; Z: " + event.values[2] + ";";
+        //if the sensor event is an accelerometer
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            //pass the data to the a method
             getAccelerometer(event);
-        }
-
-    }
+        }//end if
+    }//end onSensorChanged
 
     /**
      * Method to get the data from the wearables accelerometer
@@ -222,7 +235,7 @@ public class WearActivity extends WearableActivity implements SensorEventListene
             decreasing = xValue;
         }//end while
 
-        /**
+        /*
          * Window for Y value
          *
          * if the Y value is in the range of the window, set the Y flag to true
@@ -232,7 +245,7 @@ public class WearActivity extends WearableActivity implements SensorEventListene
             yFlag = true;
         }//end if
 
-        /**
+        /*
          * Window for Z value
          *
          * if the Z value is in the range of the window, set the Z flag to true
@@ -282,7 +295,7 @@ public class WearActivity extends WearableActivity implements SensorEventListene
         Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         //make the watch vibrate
         Objects.requireNonNull(vibrator).vibrate(100);
-        //key for passing data
+        //data path for passing data
         String datapath = "/my_path";
         //string value of the number of reps
         String numberOfReps = "" + rep;
@@ -312,4 +325,4 @@ public class WearActivity extends WearableActivity implements SensorEventListene
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-}
+}//end class

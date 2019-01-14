@@ -19,10 +19,11 @@ public class MessageRecieiverService extends WearableListenerService {
             Log.d(TAG, "Message: " + message);
             //Broadcast the received data layer messages//
             Intent messageIntent = new Intent(getApplicationContext(), WearActivity.class);
-//            messageIntent.setAction(Intent.ACTION_SEND);
-//            messageIntent.putExtra("message", message);
-//            LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);
-            startActivity(messageIntent);//Start activity instead of passing messages/0ther 3 lines pass message
+            messageIntent.setAction(Intent.ACTION_SEND);
+            messageIntent.putExtra("message", message);
+            startActivity(messageIntent);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);
+            //startActivity(messageIntent);//Start activity instead of passing messages/0ther 3 lines pass message
         }
         else {
             super.onMessageReceived(messageEvent);

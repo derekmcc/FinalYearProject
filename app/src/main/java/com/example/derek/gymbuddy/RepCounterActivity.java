@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class RepCounterActivity extends BaseActivity  {
@@ -46,6 +48,7 @@ public class RepCounterActivity extends BaseActivity  {
     ListView setList;
     ArrayAdapter<String> adapter;
     boolean flag = false;
+    String strCurrentSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class RepCounterActivity extends BaseActivity  {
                 this, android.R.layout.simple_list_item_1, alSets);
         setList.setAdapter(adapter);
 
-        String strCurrentSet = "Set " + currentSet;
+        strCurrentSet = "Set " + currentSet;
         repsRemaining = reps;
         currentSetTxt.setText(strCurrentSet);
         String repsRemaing = "Reps Remaining " + reps;
@@ -95,10 +98,16 @@ public class RepCounterActivity extends BaseActivity  {
             }
         });
         progressBar.setMax(reps);
-        talkClick();//For calling activity---------------------------
+        talkClick("connect");//For calling activity---------------------------
         IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        talkClick("disconnect");
     }
 
     public void messageText(String newinfo) {
@@ -122,6 +131,7 @@ public class RepCounterActivity extends BaseActivity  {
             String strCurrentReps = "";
             currentReps++;
             String in = intent.getStringExtra("message");
+
             android.util.Log.d(TAG, in);
             label:if (!flag) {
                 android.util.Log.d(TAG,"Flag status " + flag);
@@ -153,7 +163,7 @@ public class RepCounterActivity extends BaseActivity  {
                     }
                     updateAdapter();
                 }
-                if (currentSet > sets){
+                if (currentSet > sets) {
                     alSets.set(currentSet-2, "Set " + (currentSet-1) + " of " + sets + " COMPLETED");
                     progressBar.setProgress(progress);
                     String strSet = "Set " + (currentSet-1);
@@ -163,6 +173,10 @@ public class RepCounterActivity extends BaseActivity  {
                     strCurrentReps = "Rep " + currentReps;
                     numRepsTxt.setText(strCurrentReps);
                     progressBar.setProgress(100);
+                    //create a vibrate object
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    //make the device vibrate
+                    Objects.requireNonNull(vibrator).vibrate(500);
                 } else {
                     alSets.set(currentSet - 1, "Set " + currentSet + " of " + sets + " in progress");
                     progressBar.setProgress(progress);
@@ -174,7 +188,7 @@ public class RepCounterActivity extends BaseActivity  {
                 //progressBar.setProgress(progress);
                 android.util.Log.d(TAG,"Flag status " + flag);
             }
-            else if (flag && currentSet != sets){
+            else if (flag && currentSet != sets) {
                 String strSet = "Set " + (currentSet-1);
                 strRepsRemaining = "All Sets Complete";
                 repsRemainingTxt.setText(strRepsRemaining);
@@ -191,9 +205,9 @@ public class RepCounterActivity extends BaseActivity  {
         }//end onReceive
     }//end Receiver
 
-    public void talkClick() {
+    public void talkClick(String message) {
         Log.d("RepCounter", "On receive called");
-        String message = "Sending message.... ";
+        //String message = "Sending message.... ";
         //numRepsTxt.setText(message);
         new NewThread("/my_path", message).start();
     }
@@ -229,7 +243,7 @@ public class RepCounterActivity extends BaseActivity  {
                             Wearable.getMessageClient(RepCounterActivity.this).sendMessage(node.getId(), path, message.getBytes());
                     try {
                         Integer result = Tasks.await(sendMessageTask);
-                        sendmessage("Establishing Connection...");
+                        //sendmessage("Establishing Connection...");
 
                     } catch (ExecutionException exception) {
                         //TO DO: Handle the exception//
