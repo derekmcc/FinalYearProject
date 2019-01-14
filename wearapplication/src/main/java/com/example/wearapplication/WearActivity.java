@@ -9,6 +9,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
@@ -31,7 +32,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class WearActivity extends WearableActivity implements SensorEventListener{
 
     public static final String TAG = "WearActivity";
-
+    private static final String CONNECT = "/connect";
     private TextView mTextView;
     SensorManager mSensorManager;
     private Sensor mHeartrateSensor;
@@ -53,6 +54,7 @@ public class WearActivity extends WearableActivity implements SensorEventListene
     int rep = 0;
     private boolean yFlag = false;
     private boolean zFlag = false;
+    private boolean screenOff = false;
     boolean state = false;
 
     @Override
@@ -78,12 +80,19 @@ public class WearActivity extends WearableActivity implements SensorEventListene
 //            }
 //        });
 //----------------------------------------------------------------
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = powerManager.isInteractive();
+        if (!isScreenOn) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        }
+        if (!screenOff) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
         // Register the local broadcast receiver
         IntentFilter newFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, newFilter);
+
 //        mGoogleApiClient = new GoogleApiClient.Builder(this)
 //                .addApi(com.google.android.gms.wearable.Wearable.API)
 //                .build();
@@ -134,6 +143,15 @@ public class WearActivity extends WearableActivity implements SensorEventListene
         public void onReceive(Context context, Intent intent) {
             String onMessageReceived = "I just received a  message from the handheld " + receivedMessageNumber++;
             mTextView.setText(onMessageReceived);
+
+            String in = intent.getStringExtra("disconnect");
+            Log.d("YOO",in + " ++++++++++++++++++++++");
+//            if (in.matches("disconnect")){
+//                mSensorManager.unregisterListener((SensorEventListener) context);
+//                screenOff = true;
+//                finish();
+//                System.exit(0);
+//            }
         }
     }
 

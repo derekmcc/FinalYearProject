@@ -30,6 +30,7 @@ public class RepCounterActivity extends BaseActivity  {
 
     //global scope variables
     public static final String TAG = "RepCounterActivity";
+
     GoogleApiClient googleClient;
     protected Handler myHandler;
     int receivedMessageNumber = 1;
@@ -170,13 +171,10 @@ public class RepCounterActivity extends BaseActivity  {
                     strCurrentReps = "Rep " + currentReps;
                     numRepsTxt.setText(strCurrentReps);
                 }
-
-
                 //progressBar.setProgress(progress);
                 android.util.Log.d(TAG,"Flag status " + flag);
             }
             else if (flag && currentSet != sets){
-
                 String strSet = "Set " + (currentSet-1);
                 strRepsRemaining = "All Sets Complete";
                 repsRemainingTxt.setText(strRepsRemaining);
@@ -190,18 +188,14 @@ public class RepCounterActivity extends BaseActivity  {
                 updateAdapter();
             }
             String message = "Rep " + receivedMessageNumber++;
-
-
         }//end onReceive
     }//end Receiver
-
 
     public void talkClick() {
         Log.d("RepCounter", "On receive called");
         String message = "Sending message.... ";
-        numRepsTxt.setText(message);
+        //numRepsTxt.setText(message);
         new NewThread("/my_path", message).start();
-
     }
 
 
@@ -223,7 +217,6 @@ public class RepCounterActivity extends BaseActivity  {
             message = m;
         }
 
-
         public void run() {
 
             Task<List<Node>> wearableList =
@@ -234,16 +227,12 @@ public class RepCounterActivity extends BaseActivity  {
                 for (Node node : nodes) {
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(RepCounterActivity.this).sendMessage(node.getId(), path, message.getBytes());
-
                     try {
-
                         Integer result = Tasks.await(sendMessageTask);
-                        sendmessage("I just sent the wearable a message " + sentMessageNumber++);
+                        sendmessage("Establishing Connection...");
 
                     } catch (ExecutionException exception) {
-
                         //TO DO: Handle the exception//
-
                     } catch (InterruptedException exception) {
 
                     }

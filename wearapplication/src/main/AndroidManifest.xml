@@ -3,6 +3,7 @@
     package="com.example.wearapplication">
 
     <uses-feature android:name="android.hardware.type.watch" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -33,19 +34,22 @@
             </intent-filter>
         </activity>
 
-        <!--<service-->
-            <!--android:name=".SensorService"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true" />-->
-        <!--<service-->
-            <!--android:name=".ListenerService"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true"></service>-->
+        <!-- <service -->
+        <!-- android:name=".SensorService" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="true" /> -->
+        <!-- <service -->
+        <!-- android:name=".ListenerService" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="true"></service> -->
         <service android:name=".MessageRecieiverService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-                <data android:scheme="wear" android:host="*" android:pathPrefix="/my_path" />
 
+                <data
+                    android:host="*"
+                    android:pathPrefix="/my_path"
+                    android:scheme="wear" />
             </intent-filter>
         </service>
     </application>
