@@ -46,6 +46,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnMap"
+        android:layout_width="164dp"
+        android:layout_height="86dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginEnd="231dp"
+        android:onClick="buttonListener"
+        android:text="@string/gyms_nearby"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <!--<Button-->
         <!--android:id="@+id/btnTest"-->
         <!--android:layout_width="wrap_content"-->

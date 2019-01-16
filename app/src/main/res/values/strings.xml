@@ -90,4 +90,6 @@
     <string name="no_records">No Records</string>
     <string name="rep_counter">Rep Counter</string>
     <string name="workout_planner">Workout Planner</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="gyms_nearby">Gyms Nearby</string>
 </resources>

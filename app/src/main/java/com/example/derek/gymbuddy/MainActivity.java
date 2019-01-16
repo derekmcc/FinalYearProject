@@ -50,19 +50,19 @@ public class MainActivity extends BaseActivity {
             Intent i = new Intent(this, PlannerActivity.class);
             startActivity(i);
         }//end if
-//        else if (view.getId() == R.id.btnTest) {
-//            //log message
-//            Log.d(TAG,"Going to Testing Activity");
-//
-//            //go to the planner activity
-//            Intent i = new Intent(this, TestingActivity.class);
-//            startActivity(i);
-//        }
+        else if (view.getId() == R.id.btnMap) {
+            //log message
+            Log.d(TAG,"Going to Maps Activity");
+
+            //go to the map activity
+            Intent i = new Intent(this, MapsActivity.class);
+            startActivity(i);
+        }//end else if
         else if (view.getId() == R.id.btnRepCounter) {
             //go to the planner activity
             Intent i = new Intent(this, TestingActivity.class);
             startActivity(i);
-        }
+        }//end else if
     }//end button listener
 
 //    @Override
