@@ -63,6 +63,11 @@ public class MainActivity extends BaseActivity {
             Intent i = new Intent(this, TestingActivity.class);
             startActivity(i);
         }//end else if
+        else if (view.getId() == R.id.btnTestWriteToFile) {
+            //go to the planner activity
+            Intent i = new Intent(this, WeightHistoryActivity.class);
+            startActivity(i);
+        }//end else if
     }//end button listener
 
 //    @Override

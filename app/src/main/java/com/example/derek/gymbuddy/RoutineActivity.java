@@ -1,5 +1,6 @@
 package com.example.derek.gymbuddy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -182,6 +185,8 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
                     mDatabase.updateChildren(childUpdates);
+                    String data = routineName + ", " + weight + ", " + formattedDate;
+                    writeToFile(data);
                     //display toast message
                     toastMessage("Routine Successfully Added");
                 }//end else
@@ -201,4 +206,14 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         //String key = newChildRef.getKey();
         //mDatabase.child(userId).child(key).setValue(routine);
     }
+
+    private void writeToFile(String data) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("routine.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            Log.e(TAG, "File write failed: " + e.toString());
+        }//end catch
+    }//end writeToFile method
 }//end class

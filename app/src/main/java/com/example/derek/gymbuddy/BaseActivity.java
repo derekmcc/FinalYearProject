@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -19,24 +21,24 @@ public class BaseActivity extends AppCompatActivity {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCancelable(false);
             mProgressDialog.setMessage("Loading...");
-        }
+        }//end if
 
         mProgressDialog.show();
-    }
+    }//end showProgressDialog method
 
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
-        }
-    }
+        }//end if
+    }//end hideProgressDialog method
 
     public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
-    }
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+    }//end getUid method
 
     public String getEmail() {
-        return FirebaseAuth.getInstance().getCurrentUser().getEmail();
-    }
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+    }//end getEmail method
 
     /**
      * Method to create toast messages
@@ -50,7 +52,7 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    }//end onCreateOptionsMenu method
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -60,12 +62,12 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return true;
-        }
+        }//end if
         else if (selectedItem == R.id.action_planner) {
             startActivity(new Intent(this, PlannerActivity.class));
             finish();
             return true;
-        }
+        }//end else if
         else if (selectedItem == R.id.action_repcounter) {
             startActivity(new Intent(this, TestingActivity.class));
             finish();
@@ -75,4 +77,4 @@ public class BaseActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-}
+}//end class

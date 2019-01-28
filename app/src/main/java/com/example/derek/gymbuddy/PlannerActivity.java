@@ -63,7 +63,7 @@ public class PlannerActivity extends BaseActivity {
 //        final String routineKey = routineRef.getKey();
         addRoutineBtn = findViewById(R.id.btnAddRoutine);
 
-        //"News" here will reflect what you have called your database in Firebase.->>>>>>>>>>>>>>>CHANGE DB NAME
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
