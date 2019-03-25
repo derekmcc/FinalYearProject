@@ -63,12 +63,19 @@ public class MainActivity extends BaseActivity {
             Intent i = new Intent(this, TestingActivity.class);
             startActivity(i);
         }//end else if
-        else if (view.getId() == R.id.btnTestWriteToFile) {
-            //go to the planner activity
-            //Intent i = new Intent(this, UnityPlayerActivity.class);
-           // startActivity(i);
+        else if (view.getId() == R.id.btnWeightHistory) {
+            //go to the weight history activity
+            Intent i = new Intent(this, WeightHistoryListActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.btnAvatar) {
+            //go to the 3D Avatar activity
             Intent intent = new Intent(this, UnityPlayerActivity.class);
             startActivity(intent);
+        }//end else if
+        else if (view.getId() == R.id.btnLeaderboard) {
+            //go to the leaderboard activity
+
         }//end else if
     }//end button listener
 

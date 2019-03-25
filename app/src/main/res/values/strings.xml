@@ -101,4 +101,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+    <string name="weight_history">Weight History</string>
+    <string name="routine_s_lookup">Routine\'s Lookup</string>
+    <string name="leaderboard">Leaderboard</string>
 </resources>
