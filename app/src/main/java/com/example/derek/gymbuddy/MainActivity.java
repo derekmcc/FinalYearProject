@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
+import com.example.derek.gymbuddy.UnityPlayerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends BaseActivity {
@@ -65,8 +65,10 @@ public class MainActivity extends BaseActivity {
         }//end else if
         else if (view.getId() == R.id.btnTestWriteToFile) {
             //go to the planner activity
-            Intent i = new Intent(this, WeightHistoryActivity.class);
-            startActivity(i);
+            //Intent i = new Intent(this, UnityPlayerActivity.class);
+           // startActivity(i);
+            Intent intent = new Intent(this, UnityPlayerActivity.class);
+            startActivity(intent);
         }//end else if
     }//end button listener
 

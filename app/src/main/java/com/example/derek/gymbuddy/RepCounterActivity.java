@@ -54,6 +54,7 @@ public class RepCounterActivity extends BaseActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rep_counter);
+        setTitle("Rep Counter");
 
         //assign the values to the components
         //btn = findViewById(R.id.button);

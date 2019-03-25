@@ -1,1 +1,1 @@
-include ':app', ':wearapplication'
+include ':app', ':wearapplication', ':FinalYearProject-debug'

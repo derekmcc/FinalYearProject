@@ -54,6 +54,7 @@ public class RoutineEditActivity extends BaseActivity implements NumberPicker.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routine_edit);
+        setTitle("Edit Routine");
 
         //get routine key from intent
         routine = getIntent().getStringExtra("routine");
@@ -190,7 +191,7 @@ public class RoutineEditActivity extends BaseActivity implements NumberPicker.On
         mDatabaseHelper.addData(weight, formattedDate);
         //---------------------------------------------------------------------------
         //display toast message
-        toastMessage("Routine Successfully Updated");
+        toastMessage(routineName);
 
         // String key = mDatabase.child("routines").push().getKey();
 //        final String key = routineName;

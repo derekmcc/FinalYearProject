@@ -38,7 +38,7 @@ public class TestingActivity extends BaseActivity {
 //            }
 //        });
 //    }
-private static final String TAG = "PlannerActivity";
+    private static final String TAG = "PlannerActivity";
     public static final String EXTRA_ROUTINE_KEY = "routine_key";
 
     private FloatingActionButton addRoutineBtn;
@@ -56,7 +56,7 @@ private static final String TAG = "PlannerActivity";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testing);
-        setTitle("Routine Details");
+        setTitle("Testing Activity");
 
 //        final DatabaseReference routineRef = getRef(position);
 //        final String routineKey = routineRef.getKey();

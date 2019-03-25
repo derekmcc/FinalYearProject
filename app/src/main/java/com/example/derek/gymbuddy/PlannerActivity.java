@@ -57,7 +57,7 @@ public class PlannerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planner);
-        setTitle("Routine Details");
+        setTitle("Workout Planner");
 
 //        final DatabaseReference routineRef = getRef(position);
 //        final String routineKey = routineRef.getKey();

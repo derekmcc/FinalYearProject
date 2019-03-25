@@ -30,14 +30,18 @@ public class WeightHistoryActivity extends AppCompatActivity {
     ArrayList <String> dateItem = new ArrayList<String>();
     Date firstDate;
     GraphView graphView;
+    String routine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight_history);
+
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         graphView = findViewById(R.id.graph);
-
-        databaseHelper = new DatabaseHelper(this,"Chest Press");
+        routine = getIntent().getStringExtra("routine");
+        setTitle(routine + " Weight History");
+        databaseHelper = new DatabaseHelper(this, routine);
         try {
             populateGraph();
         } catch (ParseException e) {
@@ -49,7 +53,8 @@ public class WeightHistoryActivity extends AppCompatActivity {
         Cursor data = databaseHelper.getData();
         while (data.moveToNext()) {
             weightItem.add(data.getString(1));
-            dateItem.add(data.getString(2));
+//            dateItem.add(data.getString(2));
+            Log.d(TAG,"Weight: "+weightItem);
         }
         data.close();
     }
@@ -59,14 +64,15 @@ public class WeightHistoryActivity extends AppCompatActivity {
         readInData();
 
         int size = weightItem.size();
-        DataPoint[] dataPoints = new DataPoint[size];
+        DataPoint[] dataPoints = null;
+        dataPoints = new DataPoint[size];
         SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MMM-yyyy");
 
         for(int i = 0; i < size; i++) {
-            Date date = formatter1.parse(dateItem.get(i).toString());
+          //  Date date = formatter1.parse(dateItem.get(i).toString());
 
             if (i == 0){
-                firstDate = new Date(date.getTime());
+                //firstDate = new Date(date.getTime());
             }
             int weight = Integer.parseInt(weightItem.get(i).replace(" Kg",""));
 
@@ -83,15 +89,15 @@ public class WeightHistoryActivity extends AppCompatActivity {
         graphView.addSeries(series);
 
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        //graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+        //graphView.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
 
         Calendar calendar = Calendar.getInstance();
         Date d1 = calendar.getTime();
 
         graphView.getViewport().setMinY(0);
         graphView.getViewport().setMaxY(200);
-       // graphView.getViewport().setMinX(firstDate.getTime());
-      //  graphView.getViewport().setMaxX(d1.getTime());
+        graphView.getViewport().setMinX(0);
+        graphView.getViewport().setMaxX(size);
         graphView.getViewport().setYAxisBoundsManual(true);
 
        // graphView.getViewport().setXAxisBoundsManual(true);
