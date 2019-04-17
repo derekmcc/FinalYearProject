@@ -40,6 +40,15 @@ public class BaseActivity extends AppCompatActivity {
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
     }//end getEmail method
 
+    public String getUsernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        }//end if
+        else {
+            return email;
+        }//end else
+    }//end usernameFromEmail
+
     /**
      * Method to create toast messages
      * @param message Sentence to be passed

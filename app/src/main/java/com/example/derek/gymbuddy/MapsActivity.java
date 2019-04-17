@@ -123,7 +123,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,
         Log.d(TAG, url);
         GetNearbyGymsData getNearbyPlacesData = new GetNearbyGymsData();
         getNearbyPlacesData.execute(DataTransfer);
-        Toast.makeText(MapsActivity.this,"Nearby Gyms", Toast.LENGTH_LONG).show();
     }//end gymsNearBy method
 
     protected synchronized void buildGoogleApiClient() {

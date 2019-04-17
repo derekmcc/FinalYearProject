@@ -129,7 +129,6 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
             Log.e(TAG, "User " + userId + " is unexpectedly null");
             toastMessage("Error: could not fetch user.");
         } else {
-
             writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
         }
     }
@@ -170,7 +169,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         final String formattedDate = df.format(c);
 
-       // String key = mDatabase.child("routines").push().getKey();
+        // String key = mDatabase.child("routines").push().getKey();
         final String key = routineName;
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() {

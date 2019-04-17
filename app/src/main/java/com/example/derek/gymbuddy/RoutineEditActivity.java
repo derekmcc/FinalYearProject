@@ -190,8 +190,6 @@ public class RoutineEditActivity extends BaseActivity implements NumberPicker.On
         mDatabaseHelper = new DatabaseHelper(this,routineName);
         mDatabaseHelper.addData(weight, formattedDate);
         //---------------------------------------------------------------------------
-        //display toast message
-        toastMessage(routineName);
 
         // String key = mDatabase.child("routines").push().getKey();
 //        final String key = routineName;

@@ -43,10 +43,10 @@ public class SwipeRecyclerViewAdapter extends RecyclerSwipeAdapter<SwipeRecycler
 
         viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
 
-        //dari kiri
+
         viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, viewHolder.swipeLayout.findViewById(R.id.bottom_wrapper1));
 
-        //dari kanan
+
         viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, viewHolder.swipeLayout.findViewById(R.id.bottom_wraper));
 
 

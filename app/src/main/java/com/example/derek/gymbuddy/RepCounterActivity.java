@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,14 +18,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.derek.gymbuddy.logger.Log;
+import com.example.derek.gymbuddy.models.UserProfile;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -42,14 +51,15 @@ public class RepCounterActivity extends BaseActivity  {
     ProgressBar progressBar;
     int progress = 0;
     private String weight;
-    private int sets, reps;
+    private int sets, reps, points;
     private int currentSet = 1, repsRemaining = 0, currentReps = 0;
     private ArrayList<String> alSets;
     ListView setList;
     ArrayAdapter<String> adapter;
     boolean flag = false;
     String strCurrentSet;
-
+    private FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +77,23 @@ public class RepCounterActivity extends BaseActivity  {
         weight = getIntent().getStringExtra("weight");
         reps = getIntent().getIntExtra("reps", 0);
         sets = getIntent().getIntExtra("sets", 0);
+
+        //create a reference to the database
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        //create a reference to the database child
+        mDatabase = ref.child("leaderboard").child(getUid());
+        //get the data from the database
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserProfile user =  dataSnapshot.getValue(UserProfile.class);
+                points = user.getPoints();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         alSets = new ArrayList<String>();
         for (int i = 0; i < sets; i++){
@@ -104,6 +131,21 @@ public class RepCounterActivity extends BaseActivity  {
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
     }
+
+    private void updatePoints(final int newPoints) {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabase = mFirebaseDatabase.getReference();
+        //final String key = username;
+        String userId = getUid();
+        String email = getEmail();
+        String username = getUsernameFromEmail(email);
+
+        UserProfile  userProfile = new UserProfile(userId, username, newPoints);
+        Map<String, Object> postValues = userProfile.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/leaderboard/" + userId, postValues);
+        mDatabase.updateChildren(childUpdates);
+    }//end updatePoints
 
     @Override
     protected void onPause() {
@@ -162,6 +204,10 @@ public class RepCounterActivity extends BaseActivity  {
                     if (!flag) {
                         alSets.set(currentSet - 1, "Set " + currentSet + " of " + sets + " in progress");
                     }
+                    //add 5 points to the users account
+                    points += 5;
+                    updatePoints(points);
+
                     updateAdapter();
                 }
                 if (currentSet > sets) {
@@ -174,6 +220,11 @@ public class RepCounterActivity extends BaseActivity  {
                     strCurrentReps = "Rep " + currentReps;
                     numRepsTxt.setText(strCurrentReps);
                     progressBar.setProgress(100);
+
+                    //add 10 points to the users account
+                    points += 10;
+                    updatePoints(points);
+
                     //create a vibrate object
                     Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     //make the device vibrate

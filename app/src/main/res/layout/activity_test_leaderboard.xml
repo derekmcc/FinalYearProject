@@ -20,7 +20,6 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:id="@+id/planner"
-            android:onClick="buttonListener"
             android:layout_width="160dp"
             android:layout_height="190dp"
             android:layout_margin="10dp">
@@ -61,8 +60,6 @@
             android:clickable="true"
             android:layout_width="160dp"
             android:layout_height="190dp"
-            android:id="@+id/repCounter"
-            android:onClick="buttonListener"
             android:layout_margin="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -109,8 +106,6 @@
             android:clickable="true"
             android:layout_width="160dp"
             android:layout_height="190dp"
-            android:id="@+id/gymNearBy"
-            android:onClick="buttonListener"
             android:layout_margin="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,7 +145,7 @@
             android:layout_width="160dp"
             android:layout_height="190dp"
             android:id="@+id/weightHistory"
-            android:onClick="buttonListener"
+            android:onClick="jj"
             android:layout_margin="10dp">
 
             <LinearLayout
@@ -203,8 +198,6 @@
             android:clickable="true"
             android:layout_width="160dp"
             android:layout_height="190dp"
-            android:id="@+id/routinesLookup"
-            android:onClick="buttonListener"
             android:layout_margin="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -243,8 +236,6 @@
             android:clickable="true"
             android:layout_width="160dp"
             android:layout_height="190dp"
-            android:id="@+id/leaderboard"
-            android:onClick="buttonListener"
             android:layout_margin="10dp">
 
             <LinearLayout

@@ -10,13 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.derek.gymbuddy.models.User;
+import com.example.derek.gymbuddy.models.UserProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends BaseActivity {
 
@@ -25,9 +32,10 @@ public class LoginActivity extends BaseActivity {
     private DatabaseReference mDatabase;
 
     private static final String TAG = "LoginActivity";
-    private String email, password;
+    private String email, password, userId, username;
     private EditText txtEmail, txtPassword;
     private Button btnSignIn, btnSignUp;
+    private int points = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +84,9 @@ public class LoginActivity extends BaseActivity {
 
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail());
+
+        //add the user to the leaderboard
+        addUserDataToLeaderBoard(user.getUid(), username);
 
         // Go to MainActivity
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -172,4 +183,31 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }//end signUp
+
+    public void addUserDataToLeaderBoard(String id, String name){
+
+        userId = id;
+        username = name;
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("leaderboard").child(getUid()).hasChild(username)) {
+                    toastMessage("User Already Exists");
+                }//end if
+                else {
+                    UserProfile userProfile = new UserProfile(userId, username, points);
+                    Map<String, Object> postValues = userProfile.toMap();
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/leaderboard/" + userId, postValues);
+                    mDatabase.updateChildren(childUpdates);
+                }//end else
+            }//end onDataChange
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }//end onCancelled
+        });
+    }//end addUserDataToLeaderboard
 }//end class
