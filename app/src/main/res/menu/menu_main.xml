@@ -7,16 +7,4 @@
         android:title="@string/menu_logout"
         android:visible="true"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_planner"
-        android:title="@string/workout_planner"
-        android:visible="true"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_repcounter"
-        android:title="@string/rep_counter"
-        android:visible="true"
-        app:showAsAction="never" />
 </menu>

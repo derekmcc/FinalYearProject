@@ -1,27 +1,10 @@
 package com.example.derek.gymbuddy;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-import com.example.derek.gymbuddy.UnityPlayerActivity;
-import com.example.derek.gymbuddy.models.Routine;
-import com.example.derek.gymbuddy.models.UserProfile;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends BaseActivity {
 
@@ -72,6 +55,8 @@ public class MainActivity extends BaseActivity {
             //log message
             Log.d(TAG,"Going to Planner Activity");
 
+            finish();
+
             //go to the planner activity
             Intent i = new Intent(this, PlannerActivity.class);
             startActivity(i);
@@ -80,16 +65,19 @@ public class MainActivity extends BaseActivity {
             //log message
             Log.d(TAG,"Going to Maps Activity");
 
+            finish();
             //go to the map activity
             Intent i = new Intent(this, MapsActivity.class);
             startActivity(i);
         }//end else if
         else if (view.getId() == R.id.repCounter) {
+            finish();
             //go to the planner activity
-            Intent i = new Intent(this, TestingActivity.class);
+            Intent i = new Intent(this, RepCounterListActivity.class);
             startActivity(i);
         }//end else if
         else if (view.getId() == R.id.weightHistory) {
+            finish();
             //go to the weight history activity
             Intent i = new Intent(this, WeightHistoryListActivity.class);
             startActivity(i);
@@ -100,13 +88,18 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         }//end else if
         else if (view.getId() == R.id.leaderboard) {
+            finish();
             //go to the leaderboard activity
             Intent intent = new Intent(this, LeaderBoardActivity.class);
             startActivity(intent);
         }//end else if
     }//end button listener
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }//end onBackPressed
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.menu_main, menu);

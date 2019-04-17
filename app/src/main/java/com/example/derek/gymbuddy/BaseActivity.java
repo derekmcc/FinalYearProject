@@ -72,16 +72,6 @@ public class BaseActivity extends AppCompatActivity {
             finish();
             return true;
         }//end if
-        else if (selectedItem == R.id.action_planner) {
-            startActivity(new Intent(this, PlannerActivity.class));
-            finish();
-            return true;
-        }//end else if
-        else if (selectedItem == R.id.action_repcounter) {
-            startActivity(new Intent(this, TestingActivity.class));
-            finish();
-            return true;
-        }
         else {
             return super.onOptionsItemSelected(item);
         }

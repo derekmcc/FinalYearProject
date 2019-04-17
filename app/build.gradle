@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.jjoe64:graphview:4.2.2'
-    implementation project(":FinalYearProject-debug")
+    implementation project(":FinalYearProject-debu")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 apply plugin: 'com.google.gms.google-services'

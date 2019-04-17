@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -52,7 +51,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
+        setTitle("Gyms Nearby");
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }//end if
@@ -277,28 +276,24 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }//end onCreateOptionsMenu method
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int selectedItem = item.getItemId();
-        if (selectedItem == R.id.action_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return true;
-        }//end if
-        else if (selectedItem == R.id.action_planner) {
-            startActivity(new Intent(this, PlannerActivity.class));
-            finish();
-            return true;
-        }//end else if
-        else if (selectedItem == R.id.action_repcounter) {
-            startActivity(new Intent(this, TestingActivity.class));
-            finish();
-            return true;
-        }//end else if
-        else {
-            return super.onOptionsItemSelected(item);
-        }//end else
-    }//end onOptionsItemSelected method
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MapsActivity.this, MainActivity.class));
+        finish();
+    }//end onBackPressed
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int selectedItem = item.getItemId();
+//        if (selectedItem == R.id.action_logout) {
+//            FirebaseAuth.getInstance().signOut();
+//            startActivity(new Intent(this, LoginActivity.class));
+//            finish();
+//            return true;
+//        }//end if
+//        else {
+//            return super.onOptionsItemSelected(item);
+//        }//end else
+//    }//end onOptionsItemSelected method
 }//end class

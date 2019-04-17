@@ -46,7 +46,7 @@ public class LeaderBoardActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
-
+        setTitle("Leaderboard");
         String email = getEmail();
         String username = getUsernameFromEmail(email);
 
@@ -97,4 +97,11 @@ public class LeaderBoardActivity extends BaseActivity {
         super.onStop();
         mLeaderboardRVAdapter.stopListening();
     }//end onStop
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(LeaderBoardActivity.this, MainActivity.class));
+        finish();
+    }//end onBackPressed
 }
