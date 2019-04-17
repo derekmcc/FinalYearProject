@@ -94,11 +94,16 @@ public class TestingActivity extends BaseActivity {
                         reps = model.getReps();
                         sets = model.getSets();
 
-                        Intent intent = new Intent(getApplicationContext(), RepCounterActivity.class);
-                        intent.putExtra("weight", weight);
-                        intent.putExtra("reps", reps);
-                        intent.putExtra("sets", sets);
-                        startActivity(intent);
+                        if (model.getRoutine().matches("Barbell Curl") || model.getRoutine().matches("Dumbbell Bicep Curl") || model.getRoutine().matches("Bicep Cable Curl")){
+                            Intent intent = new Intent(getApplicationContext(), RepCounterActivity.class);
+                            intent.putExtra("weight", weight);
+                            intent.putExtra("reps", reps);
+                            intent.putExtra("sets", sets);
+                            startActivity(intent);
+                        }//end if
+                        else {
+                            toastMessage("Not Currently Supported\nCurrently Supports Barbell Curl, Dumbbell Bicep Curl and Bicep Cable Curl");
+                        }
                     }//end onClick
                 });
             }//end onBindViewHolder
