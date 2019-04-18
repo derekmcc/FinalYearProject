@@ -104,4 +104,39 @@ public class LeaderBoardActivity extends BaseActivity {
         startActivity(new Intent(LeaderBoardActivity.this, MainActivity.class));
         finish();
     }//end onBackPressed
+
+    public void buttonListener(View view) {
+        //check which button has been clicked
+        if(view == findViewById(R.id.planner)){
+            //log message
+            Log.d(TAG,"Going to Planner Activity");
+            finish();
+            //go to the planner activity
+            Intent i = new Intent(this, PlannerActivity.class);
+            startActivity(i);
+        }//end if planner
+        else if (view.getId() == R.id.repCount) {
+            finish();
+            //go to the planner activity
+            Intent i = new Intent(this, RepCounterListActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.history) {
+            finish();
+            //go to the weight history activity
+            Intent i = new Intent(this, WeightHistoryListActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.lookup) {
+            //go to the 3D Avatar activity
+            Intent intent = new Intent(this, UnityPlayerActivity.class);
+            startActivity(intent);
+        }//end else if
+        else if (view.getId() == R.id.mainMenu) {
+            finish();
+            //go to the leaderboard activity
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }//end else if
+    }//end buttonListener method
 }

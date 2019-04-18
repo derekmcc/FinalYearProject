@@ -47,6 +47,14 @@ public class LoginActivity extends BaseActivity {
         btnSignIn = findViewById(R.id.btnSignIn);
         btnSignUp = findViewById(R.id.btnSignUp);
 
+        //hide the action bar
+        try {
+            this.getSupportActionBar().hide();
+        }//end try
+        catch (NullPointerException e){
+            Log.e(TAG,"Could not hide action bar");
+        }//end catch
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
        // mAuth.signOut();

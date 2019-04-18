@@ -19,8 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_podium" />
-                            <entry key="sourceFile" value="C:\Users\Derek\Downloads\podium.svg" />
+                            <entry key="outputName" value="ic_browse" />
+                            <entry key="sourceFile" value="C:\Users\Derek\Downloads\browse.svg" />
                           </map>
                         </option>
                       </PersistentState>

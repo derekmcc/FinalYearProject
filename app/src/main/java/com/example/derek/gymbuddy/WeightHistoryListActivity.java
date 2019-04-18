@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class WeightHistoryListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rep_counter_list);
+        setContentView(R.layout.activity_weight_history_list);
         setTitle("Weight History");
 
 //        final DatabaseReference routineRef = getRef(position);
@@ -120,4 +121,39 @@ public class WeightHistoryListActivity extends BaseActivity {
         startActivity(new Intent(WeightHistoryListActivity.this, MainActivity.class));
         finish();
     }//end onBackPressed
+
+    public void buttonListener(View view) {
+        //check which button has been clicked
+        if(view == findViewById(R.id.planner)){
+            //log message
+            Log.d(TAG,"Going to Planner Activity");
+            finish();
+            //go to the planner activity
+            Intent i = new Intent(this, PlannerActivity.class);
+            startActivity(i);
+        }//end if planner
+        else if (view.getId() == R.id.gymsNearby) {
+            finish();
+            //go to the planner activity
+            Intent i = new Intent(this, MapsActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.repCount) {
+            finish();
+            //go to the weight history activity
+            Intent i = new Intent(this, RepCounterListActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.lookup) {
+            //go to the 3D Avatar activity
+            Intent intent = new Intent(this, UnityPlayerActivity.class);
+            startActivity(intent);
+        }//end else if
+        else if (view.getId() == R.id.mainMenu) {
+            finish();
+            //go to the leaderboard activity
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }//end else if
+    }//end buttonListener method
 }

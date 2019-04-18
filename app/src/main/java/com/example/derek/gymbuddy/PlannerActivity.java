@@ -51,6 +51,37 @@ public class PlannerActivity extends BaseActivity {
             Intent i = new Intent(this, RoutineActivity.class);
             startActivity(i);
         }//end if
+        else if(view == findViewById(R.id.gymsNearby)){
+            //log message
+            Log.d(TAG,"Going to Gyms Nearby Activity");
+            finish();
+            //go to the planner activity
+            Intent i = new Intent(this, MapsActivity.class);
+            startActivity(i);
+        }//end if planner
+        else if (view.getId() == R.id.repCount) {
+            finish();
+            //go to the planner activity
+            Intent i = new Intent(this, RepCounterListActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.history) {
+            finish();
+            //go to the weight history activity
+            Intent i = new Intent(this, WeightHistoryListActivity.class);
+            startActivity(i);
+        }//end else if
+        else if (view.getId() == R.id.lookup) {
+            //go to the 3D Avatar activity
+            Intent intent = new Intent(this, UnityPlayerActivity.class);
+            startActivity(intent);
+        }//end else if
+        else if (view.getId() == R.id.mainMenu) {
+            finish();
+            //go to the leaderboard activity
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }//end else if
     }//end button listener
 
     @Override

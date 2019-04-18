@@ -9,8 +9,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:layout_height="675dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavView_bar"
+        tools:layout_editor_absoluteX="0dp"/>
 
     <TextView
         android:id="@+id/empty_view"
@@ -19,4 +21,74 @@
         android:gravity="center"
         android:text="No Records"
         android:visibility="gone" />
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/bottomNavView_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_gravity="bottom">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/bottomToolbar"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="100">
+
+
+                <ImageView
+                    android:id="@+id/planner"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="20"
+                    android:onClick="buttonListener"
+                    android:clickable="true"
+                    android:src="@drawable/ic_list" />
+
+                <ImageView
+                    android:id="@+id/repCount"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="20"
+                    android:onClick="buttonListener"
+                    android:clickable="true"
+                    android:src="@drawable/ic_counting" />
+
+                <ImageView
+                    android:id="@+id/mainMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="20"
+                    android:onClick="buttonListener"
+                    android:clickable="true"
+                    android:src="@drawable/ic_homepage" />
+
+                <ImageView
+                    android:id="@+id/lookup"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="20"
+                    android:onClick="buttonListener"
+                    android:clickable="true"
+                    android:src="@drawable/ic_browse" />
+
+                <ImageView
+                    android:id="@+id/history"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="20"
+                    android:onClick="buttonListener"
+                    android:clickable="true"
+                    android:src="@drawable/ic_diagram" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 </android.support.constraint.ConstraintLayout>
