@@ -4,9 +4,9 @@ android {
     signingConfigs {
         config {
             keyAlias 'key0'
-            keyPassword 'dodo5097rip'
+            keyPassword 'finalYearProject'
             storeFile file('C:/Users/Derek/Keystore/finalyear.jks')
-            storePassword 'dodo5097rip'
+            storePassword 'finalYearProject'
         }
     }
     compileSdkVersion 28
