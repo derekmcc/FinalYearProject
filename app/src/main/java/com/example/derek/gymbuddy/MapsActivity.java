@@ -284,6 +284,10 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback,
         finish();
     }//end onBackPressed
 
+    /**
+     * Method to handle button clicks on bottom navigation
+     * @param view Item Clicked
+     */
     public void buttonListener(View view) {
         //check which button has been clicked
         if(view == findViewById(R.id.planner)){

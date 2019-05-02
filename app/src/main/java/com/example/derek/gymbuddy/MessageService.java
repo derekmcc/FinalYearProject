@@ -1,14 +1,15 @@
 package com.example.derek.gymbuddy;
 
-import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+/**
+ * Service class to receive messages from wearable device
+ */
 public class MessageService extends WearableListenerService {
 
     public static final String TAG = "MessageServiceApp";
@@ -16,6 +17,7 @@ public class MessageService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.d(TAG, "Message Received");
+        //path that must match from the receiver
         if (messageEvent.getPath().equals("/my_path")) {
             final String message = new String(messageEvent.getData());
 

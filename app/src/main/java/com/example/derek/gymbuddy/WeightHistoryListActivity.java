@@ -21,6 +21,9 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity to display the list of routines where the user can choose to see the history of it
+ */
 public class WeightHistoryListActivity extends BaseActivity {
 
     private static final String TAG = "WeightHistoryList";
@@ -43,10 +46,6 @@ public class WeightHistoryListActivity extends BaseActivity {
         setContentView(R.layout.activity_weight_history_list);
         setTitle("Weight History");
 
-//        final DatabaseReference routineRef = getRef(position);
-//        final String routineKey = routineRef.getKey();
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
 
@@ -54,7 +53,7 @@ public class WeightHistoryListActivity extends BaseActivity {
 
         final DatabaseReference routineRef = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         Query pendingTestsQuery = routineRef.orderByKey();
-        // Query pendingTestsQuery = routineRef.orderByKey().equalTo("Arm Curls");
+
         mRecyclerView.hasFixedSize();
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -92,7 +91,7 @@ public class WeightHistoryListActivity extends BaseActivity {
             }//end RoutineViewHolder
         };
         mRecyclerView.setAdapter(mPeopleRVAdapter);
-    }
+    }//end onCreate
 
     @Override
     public void onStart() {
@@ -122,6 +121,10 @@ public class WeightHistoryListActivity extends BaseActivity {
         finish();
     }//end onBackPressed
 
+    /**
+     * Method to handle button clicks on bottom navigation
+     * @param view Item Clicked
+     */
     public void buttonListener(View view) {
         //check which button has been clicked
         if(view == findViewById(R.id.planner)){
@@ -156,4 +159,4 @@ public class WeightHistoryListActivity extends BaseActivity {
             startActivity(intent);
         }//end else if
     }//end buttonListener method
-}
+}//end activity

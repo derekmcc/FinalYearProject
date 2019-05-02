@@ -9,11 +9,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
+/**
+ * Class to download local gyms data
+ */
 public class DownloadUrl {
 
     private static final String TAG = "DownloadUrl";
 
+    /**
+     * Method to read in the chosen URL
+     * @param strUrl The google places data url of the gyms
+     * @return The gym data
+     * @throws IOException If unsuccessful
+     */
     public String readUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -21,13 +29,13 @@ public class DownloadUrl {
         try {
             URL url = new URL(strUrl);
 
-            // Creating an http connection to communicate with url
+            //create an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
 
-            // Connecting to url
+            //connect to url
             urlConnection.connect();
 
-            // Reading data from url
+            //read data from url
             iStream = urlConnection.getInputStream();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
@@ -50,5 +58,5 @@ public class DownloadUrl {
             urlConnection.disconnect();
         }//end finally
         return data;
-    }//end readUtl method
+    }//end readUrl method
 }//end class

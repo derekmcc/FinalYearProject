@@ -1,6 +1,6 @@
 package com.example.derek.gymbuddy;
 
-        import android.content.Intent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +23,9 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for the workout planner feature of the app
+ */
 public class PlannerActivity extends BaseActivity {
 
     private static final String TAG = "PlannerActivity";
@@ -35,7 +38,6 @@ public class PlannerActivity extends BaseActivity {
     private DatabaseReference mDatabase;
     private List<Routine> routineList = new ArrayList<>();
     private String mRoutineKey;
-
     private FirebaseRecyclerAdapter <Routine, RoutineViewHolder> mRoutineRVAdapter;
 
     /**
@@ -90,11 +92,7 @@ public class PlannerActivity extends BaseActivity {
         setContentView(R.layout.activity_planner);
         setTitle("Workout Planner");
 
-//        final DatabaseReference routineRef = getRef(position);
-//        final String routineKey = routineRef.getKey();
         addRoutineBtn = findViewById(R.id.btnAddRoutine);
-
-
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
@@ -165,7 +163,7 @@ public class PlannerActivity extends BaseActivity {
                 deleteRoutine(deletePosition);
             }//end onSwipe
         }).attachToRecyclerView(mRecyclerView);
-    }
+    }//end onCreate
 
     @Override
     public void onStart() {

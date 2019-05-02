@@ -1,7 +1,6 @@
 package com.example.derek.gymbuddy;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,25 +9,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.derek.gymbuddy.models.Routine;
 import com.example.derek.gymbuddy.models.UserProfile;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity to show the Gamification leaderboard
+ */
 public class LeaderBoardActivity extends BaseActivity {
 
     private static final String TAG = "LeaderBoardActivity";
@@ -40,8 +35,8 @@ public class LeaderBoardActivity extends BaseActivity {
     private DatabaseReference mDatabase;
     private List<Routine> leaderboardList = new ArrayList<>();
     private FirebaseRecyclerAdapter<UserProfile, LeaderboardViewHolder> mLeaderboardRVAdapter;
-
     public int pos = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +100,10 @@ public class LeaderBoardActivity extends BaseActivity {
         finish();
     }//end onBackPressed
 
+    /**
+     * Method to handle button clicks on bottom navigation
+     * @param view Item Clicked
+     */
     public void buttonListener(View view) {
         //check which button has been clicked
         if(view == findViewById(R.id.planner)){

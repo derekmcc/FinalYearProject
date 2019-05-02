@@ -1,10 +1,8 @@
 package com.example.derek.gymbuddy;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,10 +10,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.derek.gymbuddy.events.DatabaseHelper;
 import com.example.derek.gymbuddy.models.Routine;
-import com.example.derek.gymbuddy.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,16 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity to display workout routines
+ */
 public class RoutineActivity extends BaseActivity implements NumberPicker.OnValueChangeListener {
 
     //global scope variables and components
@@ -42,7 +38,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     DatabaseReference mDatabase;
-
+    DatabaseHelper mDatabaseHelper;
     private TextView routineDetailsTxt, routineTxt, weightTxt, repsTxt, setsTxt;
     private Spinner routineSpinner, weightSpinner;
     private NumberPicker setsNumberPicker, repsNumberPicker;
@@ -118,7 +114,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
-    }
+    }//end onPointsCaptureChanged
 
     public void userDetails() {
         String selectedRoutine = routineSpinner.getSelectedItem().toString();
@@ -130,7 +126,7 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
             toastMessage("Error: could not fetch user.");
         } else {
             writeNewRoutine(selectedRoutine,selectedWeight,sets, reps);
-        }
+        }//end else
     }
     /**
      * Method to handle button clicks
@@ -164,10 +160,18 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
         }//end else if
     }//end button listener
 
+    /**
+     * Add routine to the firebase database
+     * @param routineName Name of the routine
+     * @param weight Number of Kg of the weight
+     * @param numSets Number of sets
+     * @param numReps Number of repetitions
+     */
     private void writeNewRoutine(final String routineName, final String weight, final int numSets, final int numReps) {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         final String formattedDate = df.format(c);
+        mDatabaseHelper = new DatabaseHelper(this,routineName);
 
         // String key = mDatabase.child("routines").push().getKey();
         final String key = routineName;
@@ -185,7 +189,9 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
                     childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
                     mDatabase.updateChildren(childUpdates);
                     String data = routineName + ", " + weight + ", " + formattedDate;
-                    writeToFile(data);
+
+                    //write to file sql lite DB
+                    mDatabaseHelper.addData(weight, formattedDate);
                     //display toast message
                     toastMessage("Routine Successfully Added");
                 }//end else
@@ -196,23 +202,5 @@ public class RoutineActivity extends BaseActivity implements NumberPicker.OnValu
 
             }//end onCancelled
         });
-//        Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
-//        Map<String, Object> postValues = routine.toMap();
-//        Map<String, Object> childUpdates = new HashMap<>();
-//        childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
-//        mDatabase.updateChildren(childUpdates);
-        //DatabaseReference newChildRef = mDatabase.push();
-        //String key = newChildRef.getKey();
-        //mDatabase.child(userId).child(key).setValue(routine);
-    }
-
-    private void writeToFile(String data) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("routine.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }//end catch
-    }//end writeToFile method
+    }//end writeNewRoutine
 }//end class

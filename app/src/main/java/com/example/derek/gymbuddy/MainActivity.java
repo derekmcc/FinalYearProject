@@ -9,41 +9,13 @@ import android.widget.Button;
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
-    private Button plannerBtn, testBtn, repCounterBtn;
-   // private FirebaseDatabase mFirebaseDatabase;
-    //private FirebaseAuth mAuth;
-   // private FirebaseAuth.AuthStateListener mAuthListener;
-   // DatabaseReference mDatabase;
-
-   // public String username;
-    //public int points = 0;
-    //public String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //plannerBtn = findViewById(R.id.btnPlanner);
-     //   testBtn = findViewById(R.id.btnTest);
-       // repCounterBtn = findViewById(R.id.btnRepCounter);
-
-        //String userId = getUid();
-
-        //declare the database reference objects
-     //   mAuth = FirebaseAuth.getInstance();
-     //   mFirebaseDatabase = FirebaseDatabase.getInstance();
-      //  mDatabase = mFirebaseDatabase.getReference();
-
     }//end onCreate
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-//    }
 
     /**
      * Method to handle button clicks
@@ -100,22 +72,4 @@ public class MainActivity extends BaseActivity {
         super.onBackPressed();
         finish();
     }//end onBackPressed
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int i = item.getItemId();
-//        if (i == R.id.action_logout) {
-//            FirebaseAuth.getInstance().signOut();
-//            startActivity(new Intent(this, LoginActivity.class));
-//            finish();
-//            return true;
-//        } else {
-//            return super.onOptionsItemSelected(item);
-//        }
-//    }
 }//end class

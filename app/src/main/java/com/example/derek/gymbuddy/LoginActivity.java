@@ -36,6 +36,7 @@ public class LoginActivity extends BaseActivity {
     private EditText txtEmail, txtPassword;
     private Button btnSignIn, btnSignUp;
     private int points = 0;
+    private boolean signUpFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +94,10 @@ public class LoginActivity extends BaseActivity {
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail());
 
-        //add the user to the leaderboard
-        addUserDataToLeaderBoard(user.getUid(), username);
+        if (signUpFlag) {
+            //add the user to the leaderboard
+            addUserDataToLeaderBoard(user.getUid(), username);
+        }//end if
 
         // Go to MainActivity
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -159,7 +162,8 @@ public class LoginActivity extends BaseActivity {
                             onAuthSuccess(task.getResult().getUser());
                         }//end if
                         else {
-                            toastMessage("Sign In Failed");
+                            toastMessage("Email or Password incorrect");
+                            txtPassword.setText("");
                         }//end else
                     }
                 });
@@ -183,10 +187,11 @@ public class LoginActivity extends BaseActivity {
                         hideProgressDialog();
 
                         if (task.isSuccessful()) {
+                            signUpFlag = true;
                             onAuthSuccess(task.getResult().getUser());
                         }//end if
                         else {
-                            toastMessage("Sign Up Failed");
+                            toastMessage("Invalid Email Address");
                         }//end else
                     }
                 });

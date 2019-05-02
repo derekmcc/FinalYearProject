@@ -11,7 +11,6 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -37,6 +36,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Activity to count reps, this activity is responsible for communicating with the wearable device
+ */
 public class RepCounterActivity extends BaseActivity  {
 
     //global scope variables
@@ -60,6 +62,7 @@ public class RepCounterActivity extends BaseActivity  {
     String strCurrentSet;
     private FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,8 +133,12 @@ public class RepCounterActivity extends BaseActivity  {
         IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
-    }
+    }//end onCreate
 
+    /**
+     * Update the leader board
+     * @param newPoints The number of points
+     */
     private void updatePoints(final int newPoints) {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = mFirebaseDatabase.getReference();
@@ -151,19 +158,19 @@ public class RepCounterActivity extends BaseActivity  {
     protected void onPause() {
         super.onPause();
         talkClick("disconnect");
-    }
+    }//end onPause
 
     public void messageText(String newinfo) {
         if (newinfo.compareTo("") != 0) {
             numRepsTxt.append("\n" + newinfo);
-        }
-    }
+        }//end if
+    }//end messageText
 
     public void updateAdapter(){
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_list_item_1, alSets);
         setList.setAdapter(adapter);
-    }
+    }//end updateAdapter
 
     public class Receiver extends BroadcastReceiver {
         @Override
@@ -199,17 +206,17 @@ public class RepCounterActivity extends BaseActivity  {
                         android.util.Log.d(TAG,"Setting flag to True");
                         flag = true;
                        // break label;
-                    }
+                    }//end if
                     currentReps = 0;
                     if (!flag) {
                         alSets.set(currentSet - 1, "Set " + currentSet + " of " + sets + " in progress");
-                    }
+                    }//end if
                     //add 5 points to the users account
                     points += 5;
                     updatePoints(points);
 
                     updateAdapter();
-                }
+                }//end if
                 if (currentSet > sets) {
                     alSets.set(currentSet-2, "Set " + (currentSet-1) + " of " + sets + " COMPLETED");
                     progressBar.setProgress(progress);
@@ -236,10 +243,11 @@ public class RepCounterActivity extends BaseActivity  {
                     repsRemainingTxt.setText(strRepsRemaining);
                     strCurrentReps = "Rep " + currentReps;
                     numRepsTxt.setText(strCurrentReps);
-                }
+                }//end else
+
                 //progressBar.setProgress(progress);
                 android.util.Log.d(TAG,"Flag status " + flag);
-            }
+            }//end if
             else if (flag && currentSet != sets) {
                 String strSet = "Set " + (currentSet-1);
                 strRepsRemaining = "All Sets Complete";
@@ -252,7 +260,7 @@ public class RepCounterActivity extends BaseActivity  {
                 numRepsTxt.setText(strCurrentReps);
                 alSets.set(currentSet-2, "Set " + (currentSet-1) + " of " + sets + " COMPLETED");
                 updateAdapter();
-            }
+            }//end else if
             String message = "Rep " + receivedMessageNumber++;
         }//end onReceive
     }//end Receiver
@@ -262,7 +270,7 @@ public class RepCounterActivity extends BaseActivity  {
         //String message = "Sending message.... ";
         //numRepsTxt.setText(message);
         new NewThread("/my_path", message).start();
-    }
+    }//end talkClick
 
 
     public void sendmessage(String messageText) {
@@ -271,7 +279,7 @@ public class RepCounterActivity extends BaseActivity  {
         Message msg = myHandler.obtainMessage();
         msg.setData(bundle);
         myHandler.sendMessage(msg);
-    }
+    }//end sendmessage
 
 
     class NewThread extends Thread {
@@ -281,7 +289,7 @@ public class RepCounterActivity extends BaseActivity  {
         NewThread(String p, String m) {
             path = p;
             message = m;
-        }
+        }//end new thread
 
         public void run() {
 
@@ -301,9 +309,9 @@ public class RepCounterActivity extends BaseActivity  {
                         //TO DO: Handle the exception//
                     } catch (InterruptedException exception) {
 
-                    }
+                    }//end catch
 
-                }
+                }//end for
 
             } catch (ExecutionException exception) {
 
@@ -312,8 +320,8 @@ public class RepCounterActivity extends BaseActivity  {
             } catch (InterruptedException exception) {
 
                 //TO DO: Handle the exception//
-            }
+            }//end catch
 
-        }
-    }
-}
+        }//end run
+    }//end thread class
+}//end activity

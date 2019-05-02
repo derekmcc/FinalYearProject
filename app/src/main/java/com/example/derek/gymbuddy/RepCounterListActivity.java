@@ -21,24 +21,11 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity to display routines so the user can choose which one to count reps for
+ */
 public class RepCounterListActivity extends BaseActivity {
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_rep_counter_list);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//    }
     private static final String TAG = "PlannerActivity";
     public static final String EXTRA_ROUTINE_KEY = "routine_key";
 
@@ -59,10 +46,6 @@ public class RepCounterListActivity extends BaseActivity {
         setContentView(R.layout.activity_rep_counter_list);
         setTitle("Rep Counter Routines");
 
-//        final DatabaseReference routineRef = getRef(position);
-//        final String routineKey = routineRef.getKey();
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         mDatabase.keepSynced(true);
 
@@ -70,7 +53,7 @@ public class RepCounterListActivity extends BaseActivity {
 
         final DatabaseReference routineRef = FirebaseDatabase.getInstance().getReference().child("user-routiness").child(getUid());
         Query pendingTestsQuery = routineRef.orderByKey();
-       // Query pendingTestsQuery = routineRef.orderByKey().equalTo("Arm Curls");
+
         mRecyclerView.hasFixedSize();
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -149,6 +132,10 @@ public class RepCounterListActivity extends BaseActivity {
         finish();
     }//end onBackPressed
 
+    /**
+     * Method to handle button clicks on bottom navigation
+     * @param view Item Clicked
+     */
     public void buttonListener(View view) {
         //check which button has been clicked
         if(view == findViewById(R.id.planner)){
@@ -183,4 +170,4 @@ public class RepCounterListActivity extends BaseActivity {
             startActivity(intent);
         }//end else if
     }//end buttonListener method
-}
+}//end activity

@@ -128,7 +128,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
-                    android:text="Gyms Nearby"/>
+                    android:text="@string/gyms_nearby"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

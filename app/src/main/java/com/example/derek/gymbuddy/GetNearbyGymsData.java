@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class to get the data of gyms nearby
+ */
 public class GetNearbyGymsData extends AsyncTask<Object, String, String> {
 
     private static final String TAG = "GetNearbyGymsData";
@@ -19,6 +22,11 @@ public class GetNearbyGymsData extends AsyncTask<Object, String, String> {
     private GoogleMap mMap;
     private String url;
 
+    /**
+     * Run on a background thread
+     * @param params Map object parameters
+     * @return Google places data
+     */
     @Override
     protected String doInBackground(Object... params) {
         try {
@@ -34,6 +42,10 @@ public class GetNearbyGymsData extends AsyncTask<Object, String, String> {
         return googlePlacesData;
     }//end doInBackground
 
+    /**
+     * Run on the UI thread
+     * @param result Gym data
+     */
     @Override
     protected void onPostExecute(String result) {
         Log.d(TAG, "onPostExecute Entered");
@@ -45,6 +57,10 @@ public class GetNearbyGymsData extends AsyncTask<Object, String, String> {
         Log.d(TAG, "onPostExecute Exit");
     }//end onPostExecute
 
+    /**
+     * Show the nearby gyms by a marker on the map
+     * @param nearbyPlacesList The gyms nearby
+     */
     private void ShowNearbyGyms(List<HashMap<String, String>> nearbyPlacesList) {
         for (int i = 0; i < nearbyPlacesList.size(); i++) {
             Log.d(TAG, "Entered into showing locations");

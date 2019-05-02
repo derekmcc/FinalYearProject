@@ -1,9 +1,6 @@
 package com.example.derek.gymbuddy;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,18 +10,13 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.derek.gymbuddy.BaseActivity;
 import com.example.derek.gymbuddy.events.DatabaseHelper;
 import com.example.derek.gymbuddy.models.Routine;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -185,45 +177,8 @@ public class RoutineEditActivity extends BaseActivity implements NumberPicker.On
 
         String data = routineName + ", " + weight + ", " + formattedDate;
 
-        //write to file DB--------------------------------------------------
-        //writeToFile(data);
+        //write to file sql lite DB
         mDatabaseHelper = new DatabaseHelper(this,routineName);
         mDatabaseHelper.addData(weight, formattedDate);
-        //---------------------------------------------------------------------------
-
-        // String key = mDatabase.child("routines").push().getKey();
-//        final String key = routineName;
-//        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-//        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.child("user-routiness").child(getUid()).hasChild(key)) {
-//                    toastMessage("Routine Already Exists, \nEdit Routine Instead");
-//                }//end if
-//                else {
-//                    Routine routine = new Routine(userId, routineName, weight, numSets, numReps, formattedDate);
-//                    Map<String, Object> postValues = routine.toMap();
-//                    Map<String, Object> childUpdates = new HashMap<>();
-//                    childUpdates.put("/user-routiness/" + userId + "/" + key, postValues);
-//                    mDatabase.updateChildren(childUpdates);
-//                    //display toast message
-//                    toastMessage("Routine Successfully Updated");
-//                }//end else
-//            }//end onDataChange
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }//end onCancelled
-//        });
-    }
-    private void writeToFile(String data) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("routine.txt", Context.MODE_APPEND));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }//end catch
-    }//end writeToFile method
-}//end class
+    }//end writeNewRoutine
+}//end activity

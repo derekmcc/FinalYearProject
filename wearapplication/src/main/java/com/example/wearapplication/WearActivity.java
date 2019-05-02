@@ -33,18 +33,8 @@ public class WearActivity extends WearableActivity implements SensorEventListene
     private TextView mTextView;
     SensorManager mSensorManager;
 
-//    private long lastUpdate;
-//    private GoogleApiClient mGoogleApiClient;
-//    ScheduledExecutorService mUpdateScheduler;
-//    private static final String PATH_SENSOR_DATA = "/sensor_data";
-//    ScheduledExecutorService scheduler;
+
     float decreasing = 0;
-//    private static final String KEY_ACC_X = "acc_x";
-//    private static final String KEY_ACC_Y = "acc_y";
-//    private static final String KEY_ACC_Z = "acc_z";
-//    private static final long CONNECTION_TIME_OUT_MS = 100;
-//    private String nodeId;
-//    int receivedMessageNumber = 1;
     int rep = 0;
     private boolean yFlag = false;
     private boolean zFlag = false;
@@ -96,13 +86,6 @@ public class WearActivity extends WearableActivity implements SensorEventListene
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
-       // lastUpdate = System.currentTimeMillis();
-//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
-//
-//        }
-//        else {
-//            // Failure! No magnetometer.
-//        }
     }//end onStart method
 
     /**
@@ -234,30 +217,17 @@ public class WearActivity extends WearableActivity implements SensorEventListene
             //assign x value to decreasing
             decreasing = xValue;
         }//end while
-
-        /*
-         * Window for Y value
-         *
-         * if the Y value is in the range of the window, set the Y flag to true
-         */
+        //if the Y value is in the range of the window, set the Y flag to true
         if (yValue <= -1.3f && yValue >= -3.6f) {
             //set flag to true
             yFlag = true;
         }//end if
-
-        /*
-         * Window for Z value
-         *
-         * if the Z value is in the range of the window, set the Z flag to true
-         */
+        //if the Z value is in the range of the window, set the Z flag to true
         if (zValue >= -1.5f && zValue <= 1.5f) {
             //set flag to true
             zFlag = true;
         }//end if
-
-        // the value will be the effect of gravity on the x-axis of the device
-        // the value of 9.8 means that the device is perpendicular upwards relative to the x-axis
-        // the value of 0 means that the device is parallel relative to the x-axis
+        //if the xValue is greater than the lowest X axis value
         if(xValue > decreasing) {
             //if decreasing is less than 8
             if (decreasing < 8.0f) {

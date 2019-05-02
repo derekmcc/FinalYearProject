@@ -34,12 +34,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat"
         tools:replace="android:icon,android:theme">
-        <activity android:name=".TestLeaderboardActivity"></activity>
         <activity android:name=".LeaderBoardActivity" />
-        <activity android:name=".BottomNavActivity" />
         <activity android:name=".WeightHistoryListActivity" />
         <activity android:name=".WeightHistoryActivity" />
-        <activity android:name=".TestWriteToFileActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +47,7 @@
         <activity android:name=".PlannerActivity" />
         <activity android:name=".RoutineActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".viewholder.PlannerAdapterActivity" />
+        <!--<activity android:name=".viewholder.PlannerAdapterActivity" />-->
         <activity android:name=".RepCounterListActivity" />
         <activity android:name=".RepCounterActivity" />
 
@@ -88,6 +85,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+        <activity android:name=".BaseActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
